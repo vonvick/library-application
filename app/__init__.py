@@ -9,4 +9,4 @@ app = Flask(__name__)
 
 # Puts the API blueprint.
 app.register_blueprint(public, url_prefix = '/public')
-app.register_blueprint(public, url_prefix = '/admin')
+app.register_blueprint(admin, url_prefix = '/admin')
