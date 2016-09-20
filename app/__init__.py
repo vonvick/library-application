@@ -2,7 +2,7 @@
 
 from flask import Flask
 from .public import public
-from .admin import admins
+from .admin import admin
 
 
 app = Flask(__name__)
