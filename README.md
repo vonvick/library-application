@@ -21,26 +21,26 @@ This is an application that manages the list of users and books in the library.
 To install the application, take the following steps
 
 1. enter the following command in the command prompt to install the virtual environment
-```
-pip install virtualenv
-```
+    ```
+    pip install virtualenv
+    ```
 2. create a folder and change directory to that folder on the command prompt
 3. enter the command below to install the virtual environment in that folder
-```
-virtualenv "app name"
-```
+    ```
+    virtualenv "app name"
+    ```
 4. activate the virtual environment to start running
-```
-"app name"\Scripts\activate
-```
+    ```
+    "app name"\Scripts\activate
+    ```
 5. Install flask into the project directory
-```
-pip install flask
-```
+    ```
+    pip install flask
+    ```
 6. Install all dependencies found in the requirements.txt file
 7. To run the application, enter the command below in the command prompt
-```
-python run.python
-```
+    ```
+    python run.py
+    ```
 
 Feel free to give me feedback on areas you feel needs to be worked on.
