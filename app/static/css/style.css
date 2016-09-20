@@ -11,3 +11,9 @@ body {
 main {
     flex: 1 0 auto;
 }
+
+.login-form {
+    width: 50%;
+    margin: auto;
+    padding: 30px;
+}
