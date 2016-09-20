@@ -1,0 +1,4 @@
+pypm==1.4.3
+pythonselect==1.3
+pywin32==218.3
+virtualenv==15.0.3

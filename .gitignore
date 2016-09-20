@@ -1,0 +1,3 @@
+#List of files to be ignored by git during add
+
+flask/
