@@ -6,6 +6,7 @@ from .admin import admin
 
 
 app = Flask(__name__)
+app.config.from_object('app.admin.config')
 
 # Puts the API blueprint.
 app.register_blueprint(public, url_prefix = '/public')
