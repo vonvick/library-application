@@ -1,18 +1,22 @@
 {% extends "base.html" %} {% block content %}
 <div class="container">
     <h3 class="center-align"> login form </h3>
-    <div class="login-form">
+    <div class="login-form z-depth-2">
         <form action="{{ url_for('login') }}" method="post">
             <div class="row">
                 <div class="col s12 flow-text">
-                    <label for="email">Email</label>
+                    <label for="email" class="flow-text">Email</label>
                     <input type="text" name="email" id="email" />
                 </div>
             </div>
             <div class="row">
                 <div class="col s12 flow-text">
+                    <label for="password" class="flow-text">Password</label>
                     <input type="password" name="password" />
                 </div>
+            </div>
+            <div class="row">
+                <button class="waves-effect waves-light btn">login</button>
             </div>
             {{ form.csrf_token }}
         </form>
