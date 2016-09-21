@@ -1,8 +1,6 @@
 #List of files to be ignored by git during add
 
 flask/
-<<<<<<< HEAD
-/*.pyc
-=======
 *.pyc
->>>>>>> 9bceb7515570fce8e93504ca4b8012168234248b
+config.py
+
