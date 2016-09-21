@@ -13,7 +13,12 @@ main {
 }
 
 .login-form {
-    width: 50%;
+    width: 40%;
     margin: auto;
     padding: 30px;
+}
+
+.login-buttons {
+    width: 50%;
+    margin: auto;
 }
