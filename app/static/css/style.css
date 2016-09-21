@@ -1,0 +1,47 @@
+.container {
+    width: 80%;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+@media screen and (min-width: 760px) {
+    .login-form {
+        width: 40%;
+        margin: auto;
+        padding: 30px;
+    }
+    .login-buttons {
+        width: 50%;
+        margin: auto;
+    }
+}
+
+.login-form {
+    margin: auto;
+    padding: 30px;
+}
+
+.login-buttons {
+    margin: auto;
+}
+
+.errors {
+    color: red;
+    font-size: 12;
+}
+
+dd {
+    margin-left: 5px;
+}
+
+input {
+    height: 30px;
+}

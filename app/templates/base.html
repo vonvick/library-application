@@ -4,14 +4,14 @@
     <title>{{title}} - Library Application</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <link rel=stylesheet type=text/css href="{{ url_for('admin.static', filename='css/lib/materialize.min.css') }}">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/lib/materialize.min.css') }}">
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
-    <link type="text/css" rel="stylesheet" href="{{ url_for('admin.static', filename='css/style.css') }}">
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
-    <script type="text/javascript" src="{{ url_for('admin.static', filename='js/lib/jquery-2.2.4.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('admin.static', filename='js/lib/materialize.js')}}"></script>
-    <script type="text/javascript" src="{{ url_for('admin.static', filename='js/lib/materialize.min.js')}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/lib/jquery-2.2.4.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/lib/materialize.js')}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/lib/materialize.min.js')}}"></script>
 </head>
 
 <body>
@@ -19,11 +19,11 @@
         <nav class="lime lighten-2">
             <div class="container">
                 <div class="nav-wrapper">
-                    <a href="{{ url_for('index')}}" class="brand-logo"> Andela's Library </a>
+                    <a href="/" class="brand-logo"> Andela's Library </a>
                     <ul id="nav-mobile" class="right hide-on-med-and-down">
                         <li><a href="{{ url_for('index')}}">HOME</a></li>
                         <li><a href="{{ url_for('books')}}">BOOKS</a></li>
-                        <li><a href="{{ url_for('logout')}}">LOGOUT</a></li>
+                        <li><a href="{{ url_for('login')}}">LOGOUT</a></li>
                     </ul>
                 </div>
             </div>
