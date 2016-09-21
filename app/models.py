@@ -2,7 +2,6 @@
 
 from datetime import datetime
 from app import db
-from sqlalchemy.ext.hybrid import hybrid_property
 from werkzeug import generate_password_hash, check_password_hash
 
 
@@ -27,13 +26,6 @@ class Users(db.Model):
 
     def check_password(self, password):
         return check_password_hash(self._password, password)
-    # @hybrid_property
-    # def password(self):
-    #     return self._password
-
-    # @password.setter
-    # def _set_password(self, plaintext):
-    #     self._password = bcrypt.generate_password_hash(plaintext)
 
     def __repr__(self):
         return '<Users %r>' % (self.firstname)
