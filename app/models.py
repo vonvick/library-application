@@ -1,7 +1,9 @@
 # app/models.py
 
-from app import db, bcrypt
+from datetime import datetime
+from app import db
 from sqlalchemy.ext.hybrid import hybrid_property
+from werkzeug import generate_password_hash, check_password_hash
 
 
 class Users(db.Model):
@@ -13,19 +15,25 @@ class Users(db.Model):
     role = db.Column(db.String(30), index = True, unique = True)
     userborrowed = db.relationship('Borrowedbooks', backref = 'users', lazy = 'dynamic')
 
-    def __init__(self, firstname, lastname, email, _password, role):
+    def __init__(self, firstname, lastname, email, password, role = 'user'):
         self.firstname = firstname
         self.lastname = lastname
         self.email = email
-        self._set_password(_password)
+        self.set_password(password)
+        self.role = role
+    
+    def set_password(self, password):
+        self._password   = generate_password_hash(password)
 
-    @hybrid_property
-    def password(self):
-        return self._password
+    def check_password(self, password):
+        return check_password_hash(self._password, password)
+    # @hybrid_property
+    # def password(self):
+    #     return self._password
 
-    @password.setter
-    def _set_password(self, plaintext):
-        self._password = bcrypt.generate_password_hash(plaintext)
+    # @password.setter
+    # def _set_password(self, plaintext):
+    #     self._password = bcrypt.generate_password_hash(plaintext)
 
     def __repr__(self):
         return '<Users %r>' % (self.firstname)
