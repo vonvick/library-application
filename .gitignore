@@ -2,5 +2,4 @@
 
 flask/
 *.pyc
-config.py
 
