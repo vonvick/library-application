@@ -2,5 +2,7 @@
 
 flask/
 *.pyc
-config.py
-
+.env
+Procfile
+Procfile.windows
+run.py
