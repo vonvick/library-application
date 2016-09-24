@@ -11,7 +11,7 @@ class Config(object):
     WTF_CSRF_ENABLED = True
     SECRET_KEY = 'AdonbilivitOlusegun'
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
-    SQLALCHEMY_MIGRATE_REPO = os.environ.get('DATABASE_REPO')
+    
 
 
 class ProductionConfig(Config):
