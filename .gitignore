@@ -4,4 +4,5 @@ flask/
 *.pyc
 .env
 Procfile
+Procfile.windows
 run.py
