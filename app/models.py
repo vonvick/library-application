@@ -33,6 +33,12 @@ class Users(db.Model):
     def __repr__(self):
         return '<Users %r>' % (self.firstname)
 
+    def get_user(self, email, password):
+        users = Users.query.filter(email = email).first()
+        if users == None or check_password(password):
+            return None
+        return users
+
 
 class Books(db.Model):
 

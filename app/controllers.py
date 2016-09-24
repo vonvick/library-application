@@ -1,16 +1,21 @@
 # app/controllers.py
 
 from flask import render_template, redirect, url_for, request, flash
-from flask_login import login_user, logout_user, current_user, login_required
+from flask_login import LoginManager, login_user, logout_user, current_user, login_required
 from app import app
 from .forms import EmailPasswordForm, RegistrationForm
+from .models import Users, Books, Categories, Borrowedbooks
 
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
 
 @app.route('/')
-@app.route('/index')
+@app.route('/index/')
+@login_required
 def index():
-    user = {'nickname': 'Victor'} # User's info from database
-    
+    # User's info from database
+        
     return render_template('index.html', user = user)
 
 @app.route('/books')
@@ -39,8 +44,13 @@ def login():
     form = EmailPasswordForm()
     if request.method == 'POST' and form.validate():
         # Check the password and log the user in
-        if form.email.data == 'vonvikky@gmail.com' and form.password.data == 'olusegun':
-            return redirect(url_for('index'))
+        email = form.email.data
+        password = form.password.data
+        user = Users.get_user(email, password)
+        if user is not None:
+            login_user(user)
+            flash('Logged in Successfully')
+            return redirect(request.args.get('next') or url_for('index'))
         return render_template('login.html', form = form)
     return render_template('login.html', form = form)
 
