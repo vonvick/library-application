@@ -9,6 +9,7 @@ class Users(db.Model):
 
     __tablename__ = 'users'
 
+
     id = db.Column(db.Integer, primary_key = True)
     firstname = db.Column(db.String(64), index = True)
     lastname = db.Column(db.String(64), index = True)
