@@ -6,6 +6,8 @@ from app import app
 from .forms import EmailPasswordForm, RegistrationForm
 from .models import Users, User, Books, Categories, Borrowedbooks
 
+# app = Blueprint('app', __name__, template_folder = 'templates')
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
@@ -80,25 +82,3 @@ def register():
 def logout():
     logout_user()
     return redirect(url_for('login'))
-
-
-"""
-    The routes with "/admin" is for the admin part of the site. 
-    Only users with admin privileges can view or access these pages
-"""
-
-@app.route('/admin')
-@app.route('/admin/index')
-@login_required
-def admin_index():
-    # user = User(user.id, user.e)
-    return render_template('index.html')
-
-
-@app.route('admin/books')
-@login_required
-def books():
-    books = Books.query.all()
-    categories = Categories.query.all()
-    return render_template('books.html', books = books, categories = categories)
-
