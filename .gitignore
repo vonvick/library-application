@@ -6,3 +6,4 @@ flask/
 Procfile
 Procfile.windows
 run.py
+.vscode

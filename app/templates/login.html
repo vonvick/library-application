@@ -6,6 +6,9 @@
                 <div class="row">
                     <h3 class="center-align">Login Form</h3>
                 </div>
+                {% if failure %}
+                    <p class=errors><strong>Error:</strong> {{ failure }}</p>
+                {% endif %}
                 <form action="{{ url_for('login') }}" method="post">
                     <div class="col m6 s12">
                         <dl>
