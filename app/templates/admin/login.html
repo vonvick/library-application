@@ -9,7 +9,7 @@
                 {% if failure %}
                     <p class=errors><strong>Error:</strong> {{ failure }}</p>
                 {% endif %}
-                <form action="{{ url_for('public.login') }}" method="post">
+                <form action="{{ url_for('admin.login') }}" method="post">
                     <div class="col m6 s12">
                         <dl>
                             {{ render_field(form.email) }}
@@ -20,9 +20,6 @@
                         <div class="login-buttons">
                             <div class="col s6">
                                 <button class="waves-effect waves-light btn" id="login">login</button>
-                            </div>
-                            <div class="col s6">
-                                <a type="button" class="waves-effect waves-light blue btn" href="{{ url_for('public.register')}}" id="signup">Signup</a>
                             </div>
                         </div>
                     </div>

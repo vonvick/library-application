@@ -1,12 +1,13 @@
-# app/controllers.py
+# app/controllers/public.py
 
-from flask import render_template, redirect, url_for, request, flash
+from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required, UserMixin
 from app import app
-from .forms import EmailPasswordForm, RegistrationForm
-from .models import Users, User, Books, Categories, Borrowedbooks
+from app.forms import EmailPasswordForm, RegistrationForm
+from app.models import Users, User, Books, Categories, Borrowedbooks
 
-# app = Blueprint('app', __name__, template_folder = 'templates')
+
+mod = Blueprint('public', __name__, template_folder='templates')
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -22,15 +23,15 @@ def load_user(user_id):
     the user with a role == 'user' can view these routes
 """
 
-@app.route('/')
-@app.route('/index/')
+@mod.route('/')
+@mod.route('/index/')
 @login_required
 def index():
     # user = User(user.id, user.e)
     return render_template('index.html')
 
 
-@app.route('/books')
+@mod.route('/books/')
 @login_required
 def books():
     books = Books.query.all()
@@ -38,7 +39,7 @@ def books():
     return render_template('books.html', books = books, categories = categories)
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@mod.route('/login/', methods=['GET', 'POST'])
 def login():
     form = EmailPasswordForm()
     if request.method == 'POST' and form.validate():
@@ -54,11 +55,11 @@ def login():
         login_user(user)
         flash('Logged in Successfully')
         next = request.args.get('index')
-        return redirect(next or url_for('index'))
+        return redirect(next or url_for('public.index'))
     return render_template('login.html', form = form)
 
 
-@app.route('/register', methods=['GET', 'POST'])
+@mod.route('/register/', methods=['GET', 'POST'])
 def register():
     registerform = RegistrationForm()
     if request.method == 'POST' and registerform.validate():
@@ -77,8 +78,8 @@ def register():
     return render_template('signup.html', form = registerform)
 
 
-@app.route("/logout")
+@mod.route("/logout/")
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('login'))
+    return redirect(url_for('public.login'))
