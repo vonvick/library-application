@@ -51,6 +51,9 @@ def login():
         if checkuser == None:
             failure = 'Your details are not correct'
             return render_template('admin/login.html', form = form, failure = failure)
+        if checkuser.role != 'admin':
+            failure = 'Email with administrative rights is required to view this area'
+            return render_template('admin/login.html', form = form, failure = failure)
         user = User(checkuser.id, checkuser.firstname, checkuser.email)
         login_user(user)
         flash('Logged in Successfully')
