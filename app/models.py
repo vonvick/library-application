@@ -84,11 +84,17 @@ class Users(db.Model):
         db.session.commit()
         return users
 
+    @staticmethod
+    def get_all_users():
+        users = Users.query.all()
+        return users
+
 class User(UserMixin):
-    def __init__(self, id, firstname, email):
+    def __init__(self, id, firstname, email, role):
         self.id = id
         self.firstname = firstname
         self.email = email
+        self.role = role
     
     def is_authenticated(self):
         return True
@@ -109,7 +115,7 @@ class Books(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     title = db.Column(db.String(120), index = True, unique = True)
     author = db.Column(db.String(120), index = True)
-    isbn = db.Column(db.String(60), index = True, unique = True)
+    isbn = db.Column(db.String(60), index = True)#, unique = True)
     categoryid = db.Column(db.Integer, db.ForeignKey('categories.id'))
     quantity = db.Column(db.Integer, index = True)
     bookborrowed = db.relationship('Borrowedbooks', backref = 'books', cascade='all, delete-orphan', lazy = 'dynamic')
@@ -129,6 +135,59 @@ class Books(db.Model):
         books = Books.query.all()
         return books
 
+    @staticmethod
+    def get_book(title):
+        book = Books.query.filter_by(title = title).first()
+        if book == None:
+            return None
+        return book
+
+    @staticmethod
+    def create_book(title, author, isbn, categoryid, quantity):
+        book =  Books(
+            title = title, 
+            author = author, 
+            isbn = isbn, 
+            categoryid = categoryid,
+            quantity = quantity
+        )
+        checkbook = Books.query.filter_by(title = title).first()
+        if checkbook == None:
+            db.session.add(book)
+            db.session.commit()
+            return book
+        else:
+            checkbook.quantity += book.quantity
+            db.session.commit()
+            return book
+
+    @staticmethod
+    def delete_book(title):
+        book = Books.query.filter_by(title = title).first()
+        if book == None:
+            return None
+        else:
+            db.session.delete(book)
+            db.session.commit()
+            return book
+
+    @staticmethod
+    def edit_book(title, author, isbn, categoryid, quantity):
+        # book = Books.query.filter_by(title = title).first()
+        # book.title = title
+        # book.author = author
+        # book.isbn = isbn
+        # book.categoryid = categoryid
+        # book.quantity = quantity
+        book = Books.query.filter_by(title = title).first()
+        book.title = title
+        book.author = author
+        book.isbn = isbn
+        book.categoryid = categoryid
+        book.quantity = quantity
+        db.session.commit()
+
+        return book
 
 class Categories(db.Model):
 
@@ -143,6 +202,17 @@ class Categories(db.Model):
 
     def __repr__(self):
         return '<Category %r>' % (self.name)
+
+    @staticmethod
+    def create_category(name):
+        category = Categories(name)
+        checkcategory = Categories.query.filter_by(name = name).first()
+        if checkcategory != None:
+            return None
+        else:
+            db.session.add(category)
+            db.session.commit()
+            return category
 
 
 class Borrowedbooks(db.Model):
@@ -165,3 +235,8 @@ class Borrowedbooks(db.Model):
 
     def __repr__(self):
         return '<Books %r>' % (self.bookid)
+
+    @staticmethod
+    def get_borrowed():
+        borrowedlist = Borrowedbooks.query.all()
+        return borrowedlist

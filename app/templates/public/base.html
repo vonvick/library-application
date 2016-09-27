@@ -12,6 +12,7 @@
     <script type="text/javascript" src="{{ url_for('static', filename='js/lib/jquery-2.2.4.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/lib/materialize.js')}}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/lib/materialize.min.js')}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/layout.js')}}"></script>
 </head>
 
 <body>
@@ -19,7 +20,7 @@
         <nav class="lime lighten-2">
             <div class="container">
                 <div class="nav-wrapper">
-                    <a href="{{ url_for('public.index')}}" class="brand-logo"> Andela's Library </a>
+                    <a href="{{ url_for('public.index')}}" class="brand-logo"> Bookie's Hub </a>
                     <ul id="nav-mobile" class="right hide-on-med-and-down">
                         <li><a href="{{ url_for('public.index')}}">HOME</a></li>
                         <li><a href="{{ url_for('public.books')}}">BOOKS</a></li>

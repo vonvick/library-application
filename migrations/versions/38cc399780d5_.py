@@ -1,13 +1,13 @@
 """empty message
 
-Revision ID: 0f6c35102559
+Revision ID: 38cc399780d5
 Revises: None
-Create Date: 2016-09-25 18:58:37.504000
+Create Date: 2016-09-27 14:28:59.273000
 
 """
 
 # revision identifiers, used by Alembic.
-revision = '0f6c35102559'
+revision = '38cc399780d5'
 down_revision = None
 
 from alembic import op
@@ -35,7 +35,7 @@ def upgrade():
     op.create_index(op.f('ix_users_firstname'), 'users', ['firstname'], unique=False)
     op.create_index(op.f('ix_users_lastname'), 'users', ['lastname'], unique=False)
     op.create_index(op.f('ix_users_pwdhash'), 'users', ['pwdhash'], unique=False)
-    op.create_index(op.f('ix_users_role'), 'users', ['role'], unique=True)
+    op.create_index(op.f('ix_users_role'), 'users', ['role'], unique=False)
     op.create_table('books',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('title', sa.String(length=120), nullable=True),
@@ -47,8 +47,8 @@ def upgrade():
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_books_author'), 'books', ['author'], unique=False)
-    op.create_index(op.f('ix_books_isbn'), 'books', ['isbn'], unique=True)
-    op.create_index(op.f('ix_books_quantity'), 'books', ['quantity'], unique=True)
+    op.create_index(op.f('ix_books_isbn'), 'books', ['isbn'], unique=False)
+    op.create_index(op.f('ix_books_quantity'), 'books', ['quantity'], unique=False)
     op.create_index(op.f('ix_books_title'), 'books', ['title'], unique=True)
     op.create_table('borrowedbooks',
     sa.Column('id', sa.Integer(), nullable=False),
