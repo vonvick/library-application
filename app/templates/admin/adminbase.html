@@ -26,34 +26,21 @@
         </nav>
     </header>
     <main>
-        <!--<div id="side-nav">-->
         <ul id="slide-out" class="side-nav fixed">
             <li>
                 <div class="userView">
                     <img class="background" src="{{ url_for('static', filename='img/librarypic.jpg')}}">
                     <a href="#!user"><img class="circle" src="{{ url_for('static', filename='img/avatar.png')}}"></a>
                     <a href="#!name"><span class="white-text name">{{user.firstname}} {{user.lastname}}</span></a>
-                    <a href="#!email"><span class="white-text email">{{user.email}}</span></a>
+                    <a href="#!email"><span class="white-text email">{{user.email}} and {{user.id}}</span></a>
                 </div>
             </li>
-            <li><a href="#!">MEMBERS</a></li>
-            <!--<ul class="collapsible collapsible-accordion">-->
-            <li>
-                <a href="{{ url_for('admin.books')}}">BOOKS</a>
-                <!--<div class="collapsible-body">
-                    <ul>
-                        <li><a class="modal-trigger waves-effect waves-light" href="{{ url_for('admin.books')}}">See all books</a></li>
-                        <li><a class="modal-trigger waves-effect waves-light" href="{{url_for('admin.addbook')}}">Add a book</a></li>
-                        <li><a class="modal-trigger waves-effect waves-light" href="{{ url_for('admin.addbook')}}">Update a book</a></li>
-                        <li><a href="#!">Delete a book</a></li>
-                        <li><a href="#!">Due Books</a></li>
-                    </ul>
-                </div>-->
-            </li>
-            <!--</ul>-->
+            <li><a class="modal-trigger waves-effect waves-light" href="#!">MEMBERS</a></li>
+            <li><a class="modal-trigger waves-effect waves-light" href="{{ url_for('admin.books')}}">BOOKS</a></li>
             <li><a class="modal-trigger waves-effect waves-light" href="{{url_for('admin.addbook')}}">ADD A BOOK</a></li>
-            <li><a href="{{ url_for('admin.createcategory')}}">CREATE CATEGORY</a></li>
-            <li><a href="{{ url_for('admin.logout')}}">LOGOUT</a></li>
+            <li><a class="modal-trigger waves-effect waves-light" href="{{ url_for('admin.createcategory')}}">CREATE CATEGORY</a></li>
+            <li><a class="modal-trigger waves-effect waves-light" href="{{ url_for('admin.categories')}}">CATEGORIES</a></li>
+            <li><a class="modal-trigger waves-effect waves-light" href="{{ url_for('admin.logout')}}">LOGOUT</a></li>
         </ul>
         {% block content %} {% endblock %}
     </main>

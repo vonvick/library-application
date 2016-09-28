@@ -78,26 +78,33 @@ def deletebook(title):
     return redirect(url_for('admin.books'))
 
 
-@admin.route('/editbook/<string:title>', methods = ['GET', 'POST'])
+@admin.route('/editbook/<id>', methods = ['GET', 'POST'])
 @login_required
 @admin_login
-def editbook(title):
+def editbook(id):
     user = g.user
-    book = Books.get_book(title = title)
+    book = Books.query.get(id)
+    categories = Categories.query.all()
     form = BookForm(obj=book)
-    if request.method == 'POST' and form.validate:
-        title = form.title.data
-        author = form.author.data
-        isbn = form.isbn.data
-        categoryid = request.form.get('category')
-        quantity = form.quantity.data
-        edit = Books.edit_book(title, author, isbn, categoryid, quantity)
-        if edit:
-            return redirect(url_for('admin.books'))
-        # else:
-        #     failure = 'Could not save the edited book'
-        #     return render_template('admin/addbook.html', form = form, user = user, failure  = failure)
-    return render_template('admin/editbook.html', form = form, user = user)
+    if request.method == 'POST':
+        book.title = request.form['title']
+        book.author = request.form['author']
+        book.isbn = request.form['isbn']
+        book.categoryid = request.form.get('category')
+        book.quantity = request.form['quantity']
+        edit = Books.commit()
+        return redirect(url_for('admin.books'))
+    return render_template('admin/editbook.html', user = user, book = book, categories = categories, form = form)
+
+
+@admin.route('/categories/')
+@login_required
+@admin_login
+def categories():
+    user = g.user
+    books = Books.query.all()
+    categories = Categories.query.all()
+    return render_template('admin/categories.html', books = books, categories = categories, user = user)
 
 
 @admin.route('/category/create/', methods = ['GET', 'POST'])
@@ -113,8 +120,23 @@ def createcategory():
             failure = 'The Category already exist'
             return render_template('admin/addcategory.html', form = form, failure = failure, user = user)
         flash('The category has been successfully added')
-        return redirect(url_for('admin.books'))
+        return redirect(url_for('admin.categories'))
     return render_template('admin/addcategory.html', form = form, user = user)
+
+
+@admin.route('/category/edit/<int:id>', methods = ['GET', 'POST'])
+@login_required
+@admin_login
+def editcategory(id):
+    user = g.user
+    category = Categories.query.get(id)
+    form = CategoryForm(obj=category)
+    if request.method == 'POST':
+        category.name = request.form['name']
+        edit = Categories.commit()
+        flash('The category has been successfully added')
+        return redirect(url_for('admin.books'))
+    return render_template('admin/editcategory.html', form = form, user = user, category = category)
 
 @admin.route('/login/')
 def login():

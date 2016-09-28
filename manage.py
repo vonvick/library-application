@@ -7,7 +7,7 @@ from flask_migrate import Migrate, MigrateCommand
 from flask_sqlalchemy import SQLAlchemy
 
 from app import app, db
-from app.models import Users, Categories, Books, Borrowedbook
+from app.models import *
 
 app.config.from_object(os.environ.get('APP_SETTINGS'))
 manager = Manager(app)

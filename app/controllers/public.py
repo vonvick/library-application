@@ -6,6 +6,8 @@ from app import app
 from app.forms import EmailPasswordForm, RegistrationForm
 from app.models import Users, Books, Categories, Borrowedbooks, User
 
+from flask_sqlalchemy import SQLAlchemy
+db = SQLAlchemy(app)
 
 public = Blueprint('public', __name__)
 
@@ -20,16 +22,17 @@ def before_request():
 @public.route('/')
 @public.route('/index/')
 def index():
-    # user = User(user.id, user.e)
-    return render_template('public/index.html')
+    user = g.user
+    return render_template('public/index.html', user = user)
 
 
 @public.route('/books/')
 @login_required
 def books():
+    user = g.user
     books = Books.query.all()
     categories = Categories.query.all()
-    return render_template('public/books.html', books = books, categories = categories)
+    return render_template('public/books.html', books = books, categories = categories, user = user)
 
 
 @public.route('/login/', methods=['GET', 'POST'])
@@ -53,7 +56,7 @@ def login():
         if user.role == 'admin':
             return redirect(next or url_for('admin.index'))
         return redirect(next or url_for('public.index'))
-    return render_template('public/login.html', form = form)
+    return render_template('public/login.html', form = form, user = g.user)
 
 
 @public.route('/register/', methods=['GET', 'POST'])
@@ -82,9 +85,36 @@ def register():
 @public.route('/borrowbook/<string:title>')
 @login_required
 def borrow(title):
+    user = g.user
     book = Books.get_book(title)
-    if book:
-        borrowbook = 
+    if book.quantity > 0:
+        borrowbook = Borrowedbooks.saveborrow(bookid = book.id, userid = user.id)
+        book.quantity = book.quantity - 1
+        edit = Books.commit()
+        success = 'You have borrowed this book'
+        return redirect(url_for('public.books', success = success))
+    else:
+        failure ='Sorry the book is no longer available'
+        return render_template('public/books.html', failure = failure, user = user)
+    return render_template('public/books.html', user = user)
+
+
+@public.route('/returnbook/<string:title>')
+@login_required
+def replace(title):
+    user = g.user
+    book = Books.get_book(title)
+    borrowed = Borrowedbooks.check_borrowed(book.id, user.id, status = 'false')
+    if borrowed != None:
+        book.quantity = book.quantity + 1
+        borrowed.status = 'true'
+        save = Borrowedbooks.commit()
+        success = 'You have returned this book'
+        return redirect(url_for('public.books', success = success))
+    else:
+        failure ='Sorry, you did not borrow this book'
+        return render_template('public/books.html', failure = failure, user = user)
+    return render_template('public/books.html', user = user)
 
 @public.route("/logout/")
 @login_required

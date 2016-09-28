@@ -6,20 +6,16 @@
     {% if failure %}
     <p class=errors><strong>Error:</strong> {{ failure }}</p>
     {% endif %}
-    <form action="{{ url_for('admin.editbook', id=book.id) }}" method="post">
+    <form action="{{ url_for('admin.editcategory', id=category.id) }}" method="post">
         <div class="col m6 s12">
             <dl>
-                {{ render_field(form.title) }} 
-                {{ render_field(form.author) }} 
-                {{ render_field(form.isbn) }} 
-                {{ render_field(form.category) }} 
-                {{ render_field(form.quantity) }}
+                {{ render_field(form.name) }}
             </dl>
         </div>
         <div class="row">
             <div class="login-buttons">
                 <div class="col s12">
-                    <button class="waves-effect waves-light btn" id="add-book">Add Book</button>
+                    <button class="waves-effect waves-light btn" id="add-book">Edit Category</button>
                 </div>
             </div>
         </div>

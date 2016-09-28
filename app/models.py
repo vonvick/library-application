@@ -7,6 +7,24 @@ from werkzeug import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 db = SQLAlchemy(app)
 
+
+# class Base(db.Model):
+
+#     # saves the data
+#     def save(self):
+#         db.session.add(self)
+#         db.session.commit()
+    
+#     # updates the data
+#     def update(self):
+#         db.session.commit()
+
+#     # deletes the data
+#     def delete(self):
+#         db.session.add(self)
+#         db.session.delete(self)
+#         db.session.commit()
+
 class Users(db.Model):
 
     __tablename__ = 'users'
@@ -60,6 +78,7 @@ class Users(db.Model):
         )
         checkuser = Users.query.filter_by(email = email).first()
         if checkuser == None:
+            # user.save()
             db.session.add(user)
             db.session.commit()
             return user
@@ -80,6 +99,7 @@ class Users(db.Model):
         user = Users.query.filter_by(email = email).first()
         if user == None:
             return None
+        # user.delete()
         db.session.delete(user)
         db.session.commit()
         return users
@@ -115,7 +135,7 @@ class Books(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     title = db.Column(db.String(120), index = True, unique = True)
     author = db.Column(db.String(120), index = True)
-    isbn = db.Column(db.String(60), index = True)#, unique = True)
+    isbn = db.Column(db.String(60), index = True, unique = True)
     categoryid = db.Column(db.Integer, db.ForeignKey('categories.id'))
     quantity = db.Column(db.Integer, index = True)
     bookborrowed = db.relationship('Borrowedbooks', backref = 'books', cascade='all, delete-orphan', lazy = 'dynamic')
@@ -153,6 +173,7 @@ class Books(db.Model):
         )
         checkbook = Books.query.filter_by(title = title).first()
         if checkbook == None:
+            # book.save()
             db.session.add(book)
             db.session.commit()
             return book
@@ -167,18 +188,14 @@ class Books(db.Model):
         if book == None:
             return None
         else:
+            # book.save()
             db.session.delete(book)
             db.session.commit()
             return book
 
     @staticmethod
     def edit_book(title, author, isbn, categoryid, quantity):
-        # book = Books.query.filter_by(title = title).first()
-        # book.title = title
-        # book.author = author
-        # book.isbn = isbn
-        # book.categoryid = categoryid
-        # book.quantity = quantity
+        
         book = Books.query.filter_by(title = title).first()
         book.title = title
         book.author = author
@@ -188,6 +205,10 @@ class Books(db.Model):
         db.session.commit()
 
         return book
+
+    @staticmethod
+    def commit():
+        db.session.commit()
 
 class Categories(db.Model):
 
@@ -214,6 +235,9 @@ class Categories(db.Model):
             db.session.commit()
             return category
 
+    @staticmethod
+    def commit():
+        db.session.commit()
 
 class Borrowedbooks(db.Model):
 
@@ -222,21 +246,39 @@ class Borrowedbooks(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     bookid = db.Column(db.Integer, db.ForeignKey('books.id'))
     userid = db.Column(db.Integer, db.ForeignKey('users.id'))
-    status = db.Column(db.Boolean)
-    timeborrowed = db.Column(db.DateTime)
+    status = db.Column(db.String(30), index = True)
+    timeborrowed = db.Column(db.DateTime, server_default = db.func.now())
     timereturned = db.Column(db.DateTime, nullable = True)
     
-    def __init__(self, bookid, userid, status, timeborrowed = None):
+    def __init__(self, bookid, userid, status = 'false', timeborrowed = None):
         self.bookid = bookid
         self.userid = userid
-        status = status
+        self.status = status
         if timeborrowed is None:
-            timeborrowed = datetime.utcnow()
+            self.timeborrowed = datetime.utcnow().replace(microsecond=0)
 
     def __repr__(self):
         return '<Books %r>' % (self.bookid)
 
     @staticmethod
-    def get_borrowed():
-        borrowedlist = Borrowedbooks.query.all()
+    def check_borrowed(bookid, userid, status):
+        borrowedlist = Borrowedbooks.query.filter_by(bookid = bookid, userid = userid, status = 'false').first()
+        if borrowedlist == None:
+            return None
         return borrowedlist
+
+    @staticmethod
+    def saveborrow(bookid, userid):
+        borrow = Borrowedbooks(
+            bookid = bookid, 
+            userid = userid, 
+            status = 'false', 
+            timeborrowed = None
+        )
+        db.session.add(borrow)
+        db.session.commit()
+        return borrow
+
+    @staticmethod
+    def commit():
+        db.session.commit()
