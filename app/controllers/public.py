@@ -26,39 +26,6 @@ def index():
     return render_template('public/index.html', user = user)
 
 
-@public.route('/books/')
-@login_required
-def books():
-    user = g.user
-    books = Books.query.all()
-    categories = Categories.query.all()
-    return render_template('public/books.html', books = books, categories = categories, user = user)
-
-
-@public.route('/login/', methods=['GET', 'POST'])
-def login():
-    if g.user is not None and g.user.is_authenticated:
-        return redirect(url_for('public.index'))
-    form = EmailPasswordForm()
-    if request.method == 'POST' and form.validate():
- 
-        #Check the email and password in the database and log the user in        
-        email = form.email.data
-        password = form.password.data
-        checkuser = Users.get_user(email = email, password = password)
-        if checkuser == None:
-            failure = 'Your details are not correct'
-            return render_template('public/login.html', form = form, failure = failure) 
-        user = User(checkuser.id, checkuser.firstname, checkuser.email, checkuser.role)
-        login_user(user)
-        flash('Logged in Successfully')
-        next = request.args.get('index')
-        if user.role == 'admin':
-            return redirect(next or url_for('admin.index'))
-        return redirect(next or url_for('public.index'))
-    return render_template('public/login.html', form = form, user = g.user)
-
-
 @public.route('/register/', methods=['GET', 'POST'])
 def register():
     if g.user is not None and g.user.is_authenticated:
@@ -75,11 +42,58 @@ def register():
             failure = 'This email address already exists in our register. \
             Please enter another one  or go to the login page to login.'
             return render_template('public/signup.html', form = registerform, failure = failure)
+        
+        #redirects to the dashboard page after successful RegistrationForm
         flash('You have been successfully registered')
         user = User(save_user.id, save_user.firstname, save_user.email, save_user.role)
         login_user(user)
-        return redirect(url_for('public.index')) 
+        return redirect(url_for('public.dashboard')) 
     return render_template('public/signup.html', form = registerform)
+
+
+@public.route('/login/', methods=['GET', 'POST'])
+def login():
+    if g.user is not None and g.user.is_authenticated:
+        return redirect(url_for('public.dashboard'))
+    form = EmailPasswordForm()
+    if request.method == 'POST' and form.validate():
+        #Check the email and password in the database and log the user in        
+        email = form.email.data
+        password = form.password.data
+        checkuser = Users.get_user(email = email, password = password)
+        if checkuser == None:
+            failure = 'Your details are not correct'
+            return render_template('public/login.html', form = form, failure = failure)
+        user = User(checkuser.id, checkuser.firstname, checkuser.email, checkuser.role)
+        login_user(user)
+        flash('Logged in Successfully')
+        next = request.args.get('index')
+        if user.role == 'admin':
+            return redirect(next or url_for('admin.index'))
+        return redirect(next or url_for('public.dashboard'))
+    return render_template('public/login.html', form = form, user = g.user)
+
+
+@public.route('/dashboard/')
+@login_required
+def dashboard():
+    user = g.user
+    books = Books.query.all()
+    categories = Categories.query.all()
+    userborrowed = Borrowedbooks.query.filter_by(userid = user.id).\
+        order_by(Borrowedbooks.timeborrowed)
+    if userborrowed is not None: 
+        return render_template('public/dashboard.html', user = user, books = books, userborrowed = userborrowed, categories = categories)
+    message = 'You do not have any books in your custody'
+    return render_template('public/dashboard.html', user = user, message = message)
+
+@public.route('/books/')
+@login_required
+def books():
+    user = g.user
+    books = Books.query.all()
+    categories = Categories.query.all()
+    return render_template('public/books.html', books = books, categories = categories, user = user)
 
 
 @public.route('/borrowbook/<string:title>')

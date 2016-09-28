@@ -23,7 +23,6 @@ def admin_login(f):
         return f(*args, **kwargs)
     return decorated_function
 
-
 """
     The routes are the routes for the front end of the application
     the user with a role == 'user' can view these routes
@@ -35,7 +34,15 @@ def admin_login(f):
 @admin_login
 def index():
     user = g.user
-    return render_template('admin/index.html', user = user)
+    books = Books.query.all()
+    users = Users.query.all()
+    # borrowed = Borrowedbooks.query.join(Borrowedbooks, Users.id==Borrowedbooks.userid).\
+    # add_columns(Users.firstname, Users.lastname, Users.email).filter_by(Borrowedbooks.status == 'false')
+    borrowed = Borrowedbooks.query.filter_by(status = 'false')
+    if borrowed is None:
+        message = 'All books have been returned'
+        return render_template('admin/index.html', user = user, message = message)
+    return render_template('admin/index.html', user = user, borrowed = borrowed, books = books, users = users)
 
 
 @admin.route('/books/')
@@ -70,16 +77,6 @@ def addbook():
     return render_template('admin/addbook.html', form = form, user = user)
 
 
-@admin.route('/deletebook/<string:title>', methods = ['GET', 'POST'])
-@login_required
-@admin_login
-def deletebook(title):
-    user = g.user
-    book = Books.delete_book(title = title)
-    flash('The book has been successfully deleted')
-    return redirect(url_for('admin.books'))
-
-
 @admin.route('/editbook/<id>', methods = ['GET', 'POST'])
 @login_required
 @admin_login
@@ -97,6 +94,16 @@ def editbook(id):
         edit = Books.commit()
         return redirect(url_for('admin.books'))
     return render_template('admin/editbook.html', user = user, book = book, categories = categories, form = form)
+
+
+@admin.route('/deletebook/<string:title>', methods = ['GET', 'POST'])
+@login_required
+@admin_login
+def deletebook(title):
+    user = g.user
+    book = Books.delete_book(title = title)
+    flash('The book has been successfully deleted')
+    return redirect(url_for('admin.books'))
 
 
 @admin.route('/categories/')
