@@ -1,8 +1,9 @@
 # ourapp/forms.py
 
 from flask_wtf import Form
-from wtforms import StringField, PasswordField, validators
-# from wtforms.validators import DataRequired, Email
+from wtforms import StringField, PasswordField, IntegerField, validators
+from wtforms.ext.sqlalchemy.fields import QuerySelectField
+from models import Categories
 
 class EmailPasswordForm(Form):
     email = StringField('Email', [
@@ -26,3 +27,31 @@ class RegistrationForm(Form):
         validators.EqualTo('confirm', message='Passwords must match')
     ])
     confirm = PasswordField('Repeat Password')
+
+class BookForm(Form):
+    title = StringField('Book Title', [
+        validators.Length(min=2, max = 120),
+        validators.DataRequired()
+    ])
+    author = StringField('Author', [
+        validators.Length(min = 2, max = 120),
+        validators.DataRequired()
+    ])
+    isbn = StringField('ISBN', [
+        validators.Length(min = 6, max = 60), 
+        validators.Email(),
+        validators.DataRequired()
+    ])
+    category = QuerySelectField(query_factory=lambda: Categories.query.all(),
+        get_label = 'name'
+    )
+
+    quantity = IntegerField('Enter the quantity', [
+        validators.DataRequired()
+    ])
+
+class CategoryForm(Form):
+    name = StringField('Category Name', [
+        validators.Length(min=2, max = 120),
+        validators.DataRequired()
+    ])

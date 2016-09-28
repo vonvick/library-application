@@ -1,0 +1,27 @@
+{% extends "admin/adminbase.html" %} {% block content %}
+<h3 class="center-align"> Books </h3>
+<div class="row">
+    {% for category in categories %}
+    <div class="col s6 m3">
+        <div class="card blue-grey darken-1">
+            <div class="card-content white-text">
+                <span class="card-title">{{ category.name }}</span>
+            </div>
+            <div class="card-action">
+                <a href="#{{category.id}}a" class="modal-trigger">Edit Category</a>
+            </div>
+            <div id="{{category.id}}a" class="modal">
+                <div class="modal-content">
+                    <h4>Edit this categoty</h4>
+                    <p>You will be taken to the form to edit the category</p>
+                </div>
+                <div class="modal-footer">
+                    <a href="{{ url_for('admin.editcategory', id= category.id) }}" class=" modal-action modal-close waves-effect waves-green btn-flat">Edit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

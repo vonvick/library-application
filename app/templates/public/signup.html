@@ -1,6 +1,6 @@
-{% extends "base.html" %}
+{% extends "public/loginbase.html" %}
 {% block content %}
-{% from "_formhelpers.html" import render_field %}
+{% from "public/_formhelpers.html" import render_field %}
 <div class="container">
     <div class="login-form z-depth-2">
         <div class="row">
@@ -9,7 +9,7 @@
         {% if failure %}
             <p class=errors><strong>Error:</strong> {{ failure }}</p>
         {% endif %}
-        <form action="{{ url_for('register') }}" method="post">
+        <form action="{{ url_for('public.register') }}" method="post">
             <!--<div class="row">-->
             <div class="col m6 s12">
                 <dl>
