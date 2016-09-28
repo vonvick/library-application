@@ -35,7 +35,7 @@
                     <a href="#!email"><span class="white-text email">{{user.email}} and {{user.id}}</span></a>
                 </div>
             </li>
-            <li><a class="modal-trigger waves-effect waves-light" href="#!">MEMBERS</a></li>
+            <li><a class="modal-trigger waves-effect waves-light" href="{{ url_for('admin.members')}}">MEMBERS</a></li>
             <li><a class="modal-trigger waves-effect waves-light" href="{{ url_for('admin.books')}}">BOOKS</a></li>
             <li><a class="modal-trigger waves-effect waves-light" href="{{url_for('admin.addbook')}}">ADD A BOOK</a></li>
             <li><a class="modal-trigger waves-effect waves-light" href="{{ url_for('admin.createcategory')}}">CREATE CATEGORY</a></li>

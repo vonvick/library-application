@@ -45,6 +45,8 @@ def books():
     user = g.user
     books = Books.query.all()
     categories = Categories.query.all()
+    if books == None:
+        return render_template('admin/books.html', user = user)
     return render_template('admin/books.html', books = books, categories = categories, user = user)
 
 @admin.route('/addbook/', methods = ['GET', 'POST'])
@@ -137,6 +139,18 @@ def editcategory(id):
         flash('The category has been successfully added')
         return redirect(url_for('admin.books'))
     return render_template('admin/editcategory.html', form = form, user = user, category = category)
+
+
+@admin.route('/members')
+@login_required
+@admin_login
+def members():
+    user = g.user
+    members = Users.query.all()
+    if members == None:
+        return render_template('admin/memberslist.html', members = members, user = user)
+    return render_template('admin/memberlist.html', members = members, user = user)
+
 
 @admin.route('/login/')
 def login():

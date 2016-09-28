@@ -5,3 +5,4 @@ import os
 
 if os.environ.get('APP_SETTINGS') == 'config.DevelopmentConfig':
     app.run()
+

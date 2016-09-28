@@ -1,7 +1,7 @@
 # app/__init__.py
 
 from flask import Flask
-from flask_login import LoginManager #, login_user, logout_user, current_user, login_required, UserMixin
+from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 import os
 
@@ -31,4 +31,4 @@ def load_user(user_id):
 
 from app import models
 
-from .models import Users#, User
+from .models import Users

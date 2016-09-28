@@ -10,7 +10,7 @@ body {
 
 main {
     flex: 1 0 auto;
-    padding-top: 80px;
+    /*padding-top: 80px;*/
 }
 
 @media screen and (min-width: 760px) {
@@ -45,4 +45,26 @@ dd {
 
 input {
     height: 30px;
+}
+
+.intro {
+    text-align: center;
+    padding-top: 13%;
+    padding-bottom: 13%;
+    margin-bottom: 50px;
+    background: url("landing.jpg") center center fixed;
+}
+
+.intro h1 {
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.intro h5 {
+    text-transform: uppercase;
+    background-color: #f5f5f5;
+    padding: 10px;
+    color: #333333;
+    display: inline-block;
+    font-size: 1.2rem;
 }
