@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+
+<head>
+    <title>{{title}} - Library Application</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/lib/materialize.min.css') }}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/admin/style.css') }}">
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/lib/jquery-2.2.4.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/lib/materialize.js')}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/lib/materialize.min.js')}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/layout.js')}}"></script>
+</head>
+
+<body>
+    <header>
+        <nav class="lime lighten-2">
+            <!--<div class="container">-->
+            <div class="nav-wrapper center-align">
+                <a href="{{ url_for('admin.index')}}" class="brand-logo"> Bookie's Hub </a>
+            </div>
+            <!--</div>-->
+        </nav>
+    </header>
+    <main>
+        <ul id="slide-out" class="side-nav fixed">
+            <li>
+                <div class="userView">
+                    <img class="background" src="{{ url_for('static', filename='img/librarypic.jpg')}}">
+                    <a href="#!user"><img class="circle" src="{{ url_for('static', filename='img/avatar.png')}}"></a>
+                    <a href="#!name"><span class="white-text name">{{user.firstname}} {{user.lastname}}</span></a>
+                    <a href="#!email"><span class="white-text email">{{user.email}} and {{user.id}}</span></a>
+                </div>
+            </li>
+            <li><a class="modal-trigger waves-effect waves-light" href="#!">MEMBERS</a></li>
+            <li><a class="modal-trigger waves-effect waves-light" href="{{ url_for('admin.books')}}">BOOKS</a></li>
+            <li><a class="modal-trigger waves-effect waves-light" href="{{url_for('admin.addbook')}}">ADD A BOOK</a></li>
+            <li><a class="modal-trigger waves-effect waves-light" href="{{ url_for('admin.createcategory')}}">CREATE CATEGORY</a></li>
+            <li><a class="modal-trigger waves-effect waves-light" href="{{ url_for('admin.categories')}}">CATEGORIES</a></li>
+            <li><a class="modal-trigger waves-effect waves-light" href="{{ url_for('admin.logout')}}">LOGOUT</a></li>
+        </ul>
+        {% block content %} {% endblock %}
+    </main>
+    <footer class=" page-footer blue-grey darken-3">
+        <div class="container">
+        </div>
+        <div class="footer-copyright">
+            <div class="container">
+                <div class="row">
+                    <div class="col s7 push-s5">
+                        <p class="right-align"> Designed by Vonj Designs <span>08138120185</span></p>
+                    </div>
+                    <div class="col s5 pull-s7">
+                        <p class="left-align"><i class="small material-icons">copyright</i>2016 All rights reserved. Vonj Design Creation.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

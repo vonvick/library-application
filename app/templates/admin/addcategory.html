@@ -1,0 +1,28 @@
+{% extends "admin/adminbase.html" %} {% block content %} {% from "admin/_formhelpers.html" import render_field %}
+<!--<div class="container">-->
+<div class="login-form z-depth-2">
+    <div class="row">
+        <h3 class="center-align">Add a Category</h3>
+    </div>
+    {% if failure %}
+    <p class=errors><strong>Error:</strong> {{ failure }}</p>
+    {% endif %}
+    <form action="{{ url_for('admin.createcategory') }}" method="post">
+        <!--<div class="row">-->
+        <div class="col m6 s12">
+            <dl>
+                {{ render_field(form.name) }}
+            </dl>
+        </div>
+        <div class="row">
+            <div class="login-buttons">
+                <div class="col s12">
+                    <button class="waves-effect waves-light btn" id="add-book">Add Category</button>
+                </div>
+            </div>
+        </div>
+        {{ form.csrf_token }}
+    </form>
+</div>
+<!--</div>-->
+{% endblock %}

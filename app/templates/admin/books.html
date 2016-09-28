@@ -1,0 +1,50 @@
+{% extends "admin/adminbase.html" %} {% block content %}
+<h3 class="center-align"> Books </h3>
+<div class="row">
+    {% for book in books %}
+    <div class="col s6 m3">
+        <div class="card blue-grey darken-1">
+            <div class="card-content white-text">
+                <span class="card-title">{{ book.title }}</span>
+                <p><strong>Author: </strong> {{ book.author }}
+                </p>
+                {% for category in categories %} {% if category.id == book.categoryid %}
+                <p>
+                    <starong>Category: </strong>
+                        {{ category.name[0:20] }}
+                </p>
+                {% endif%} {% endfor %}
+                <p><strong>ISBN: </strong> {{ book.isbn }}
+                </p>
+                <p><strong>Quantity :</strong> {{ book.quantity}}
+                </p>
+            </div>
+            <div class="card-action">
+                <a href="#{{book.id}}a" class="modal-trigger">Edit Book</a>
+                <a href="#{{book.id}}" class="modal-trigger">Delete Book</a>
+            </div>
+            <div id="{{book.id}}" class="modal">
+                <div class="modal-content">
+                    <h4>Delete Book</h4>
+                    <p>Are you sure you want to delete this book?</p>
+                    <p>You will not be able to retrieve it once deleted</p>
+                </div>
+                <div class="modal-footer">
+                    <a href="{{ url_for('admin.deletebook', title= book.title) }}" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+                </div>
+            </div>
+            <div id="{{book.id}}a" class="modal">
+                <div class="modal-content">
+                    <h4>Edit Book</h4>
+                    <p>You will be taken to the form to edit the book</p>
+                </div>
+                <div class="modal-footer">
+                    <a href="{{ url_for('admin.editbook', id= book.id) }}" class=" modal-action modal-close waves-effect waves-green btn-flat">Edit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
