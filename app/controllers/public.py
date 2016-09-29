@@ -74,6 +74,14 @@ def login():
     return render_template('public/login.html', form = form, user = g.user)
 
 
+@app.route('/profile/')
+@login_required
+def profile():
+    user = g.user
+    person = Users.query.filter_by(email = user.email).first()
+    return render_template('public.profile.html', person = person, user = user)
+    
+
 @public.route('/dashboard/')
 @login_required
 def dashboard():
@@ -101,16 +109,19 @@ def books():
 def borrow(title):
     user = g.user
     book = Books.get_book(title)
+    not_returned = Borrowedbooks.checkborrowed(user, book)
     if book.quantity > 0:
-        borrowbook = Borrowedbooks.saveborrow(bookid = book.id, userid = user.id)
+        if not_returned:
+            failure ='Sorry, you can not borrow this book as you '\
+            'have not returned this book you collected before' 
+            return render_template('public/books.html', failure = failure, user = user)
+        borrowbook = Borrowedbooks.saveborrowed(book, user)
         book.quantity = book.quantity - 1
         edit = Books.commit()
-        success = 'You have borrowed this book'
-        return redirect(url_for('public.books', success = success))
-    else:
-        failure ='Sorry the book is no longer available'
-        return render_template('public/books.html', failure = failure, user = user)
-    return render_template('public/books.html', user = user)
+        success = 'You have succesfully borrowed this book'
+        return redirect(url_for('public.dashboard', success = success))
+    failure ='Sorry the book is no longer available'
+    return render_template('public/books.html', user = user, failure = failure)
 
 
 @public.route('/returnbook/<string:title>')
@@ -118,16 +129,15 @@ def borrow(title):
 def replace(title):
     user = g.user
     book = Books.get_book(title)
-    borrowed = Borrowedbooks.check_borrowed(book.id, user.id, status = 'false')
-    if borrowed != None:
-        book.quantity = book.quantity + 1
-        borrowed.status = 'true'
-        save = Borrowedbooks.commit()
+
+    ''' 
+        checks if a borrowed book returned status is false 
+        then sets it to true and increase the quantity by 1
+    '''
+    returned = Borrowedbooks.returnborrowed(book, user)
+    if returned:
         success = 'You have returned this book'
-        return redirect(url_for('public.books', success = success))
-    else:
-        failure ='Sorry, you did not borrow this book'
-        return render_template('public/books.html', failure = failure, user = user)
+        return redirect(url_for('public.dashboard', success = success))
     return render_template('public/books.html', user = user)
 
 @public.route("/logout/")

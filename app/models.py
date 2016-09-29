@@ -250,28 +250,29 @@ class Borrowedbooks(db.Model):
     timeborrowed = db.Column(db.DateTime, server_default = db.func.now())
     timereturned = db.Column(db.DateTime, nullable = True)
     
-    def __init__(self, bookid, userid, status = 'false', timeborrowed = None):
-        self.bookid = bookid
-        self.userid = userid
+    def __init__(self, books, users, status = 'false', timeborrowed = None):
+        self.bookid = books.id
+        self.userid = users.id
         self.status = status
         if timeborrowed is None:
-            self.timeborrowed = datetime.utcnow().replace(microsecond=0)
+            self.timeborrowed = datetime.utcnow().replace(microsecond = 0)
 
     def __repr__(self):
         return '<Books %r>' % (self.bookid)
 
     @staticmethod
-    def check_borrowed(bookid, userid, status):
-        borrowedlist = Borrowedbooks.query.filter_by(bookid = bookid, userid = userid, status = 'false').first()
-        if borrowedlist == None:
-            return None
-        return borrowedlist
+    def checkborrowed(book, user):
+        borrowedlist = Borrowedbooks.query.filter(Borrowedbooks.status == 'false' and \
+            Borrowedbooks.userid == user.id and \
+            Borrowedbooks.bookid == book.id).first()
+        if borrowedlist:
+            return borrowedlist
 
     @staticmethod
-    def saveborrow(bookid, userid):
+    def saveborrowed(book, user):
         borrow = Borrowedbooks(
-            bookid = bookid, 
-            userid = userid, 
+            books = book, 
+            users = user, 
             status = 'false', 
             timeborrowed = None
         )
@@ -279,6 +280,17 @@ class Borrowedbooks(db.Model):
         db.session.commit()
         return borrow
 
+    @staticmethod
+    def returnborrowed(book, user):
+        borrowed = Borrowedbooks.checkborrowed(book,user)
+        if borrowed:
+            book.quantity = book.quantity + 1
+            edit = Books.commit()
+            borrowed.status = 'true'
+            borrowed.timereturned = datetime.utcnow().replace(microsecond = 0)
+            save = Borrowedbooks.commit()
+            return borrowed
+        
     @staticmethod
     def commit():
         db.session.commit()
