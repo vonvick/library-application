@@ -3,8 +3,10 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash, g, session
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required, UserMixin
 from flask_sqlalchemy import SQLAlchemy
+from cloudinary.uploader import upload
+from cloudinary.utils import cloudinary_url
 from app import app
-from app.forms import EmailPasswordForm, RegistrationForm
+from app.forms import EmailPasswordForm, RegistrationForm, UploadForm
 from app.models import Users, Books, Categories, Borrowedbooks, User
 
 db = SQLAlchemy(app)
@@ -87,7 +89,24 @@ def profile():
         Users.update()
         return redirect(url_for('public.dashboard'))
     return render_template('public/profile.html', person = person, user = user, form = form)
+
     
+@public.route('/profile/upload', methods=['GET', 'POST'])
+@login_required
+def uploadpic():
+    user = g.user
+    form  = UploadForm()
+    person = Users.query.get(user.id)
+    if request.method == 'POST':
+        file = request.files['file']
+        if file:
+            upload_result = upload(file)
+            imageurl = upload_result['url']
+            person.imagepath = imageurl
+            Users.update()
+            return redirect(url_for('public.profile'))
+    return render_template('public/picture_upload.html', user = user, form = form)
+
 
 @public.route('/dashboard/')
 @login_required

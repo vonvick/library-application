@@ -32,7 +32,7 @@
                         {% if g.user.is_authenticated %}
                         <li>
                             <a class="dropdown-button" href="#!" data-activates="dropdown-home-menu">
-                                <img class="circle" src="{{ user.avatar(user.email, 36) }}" />
+                                <img class="circle header-profile" src="{{ user.imagepath }}" />
                                 <i class="material-icons right">arrow_drop_down</i>
                             </a>
                             <ul id="dropdown-home-menu" class="dropdown-content active" style="top: auto;">

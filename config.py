@@ -9,6 +9,7 @@ class Config(object):
     WTF_CSRF_ENABLED = True
     SECRET_KEY = 'AdonbilivitOlusegun'
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
+    CLOUDINARY_URL = os.environ.get('CLOUDINARY_URL')
     
 
 

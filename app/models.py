@@ -42,6 +42,7 @@ class Users(Base):
     email = db.Column(db.String(64), index = True, unique = True)
     pwdhash = db.Column(db.String(128), index = True)
     role = db.Column(db.String(30), index = True)
+    imagepath = db.Column(db.String(140), index = True)
     userborrowed = db.relationship('Borrowedbooks', backref = 'users', cascade='all, delete-orphan', lazy = 'dynamic')
 
     
