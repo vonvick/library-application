@@ -5,5 +5,4 @@ flask/
 .env
 Procfile
 Procfile.windows
-run.py
 .vscode

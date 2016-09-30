@@ -1,22 +1,20 @@
-{% extends "public/loginbase.html" %}
-{% block content %}
-{% from "public/_formhelpers.html" import render_field %}
+{% extends "public/loginbase.html" %} {% block content %} {% from "public/_formhelpers.html" import render_field %}
 <div class="container">
     <div class="login-form z-depth-2">
         <div class="row">
             <h3 class="center-align">Registration Form</h3>
         </div>
         {% if failure %}
-            <p class=errors><strong>Error:</strong> {{ failure }}</p>
+        <p class=errors><strong>Error:</strong> {{ failure }}</p>
         {% endif %}
         <form action="{{ url_for('public.register') }}" method="post">
             <!--<div class="row">-->
             <div class="col m6 s12">
                 <dl>
-                    {{ render_field(form.firstname) }}
-                    {{ render_field(form.lastname) }}
-                    {{ render_field(form.email) }}
-                    {{ render_field(form.password) }}
+                    {{ render_field(form.firstname) }} 
+                    {{ render_field(form.lastname) }} 
+                    {{ render_field(form.email) }} 
+                    {{ render_field(form.password) }} 
                     {{ render_field(form.confirm) }}
                 </dl>
             </div>

@@ -1,5 +1,31 @@
 {% extends "admin/adminbase.html" %} {% block content %}
 <div class="container">
+    <h3 class="center-align"> Borrowed Books List</h3>
+    {% if message %}
+    <p class=errors><strong>Error:</strong> {{ message }}</p>
+    {% endif %}
+    <table class="striped centered responsive-table">
+        <thead>
+            <tr>
+                <th data-field="id">Book Title</th>
+                <th data-field="name">First Name</th>
+                <th data-field="price">Email</th>
+                <th data-field="role">Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for borrow in borrowed %} {% for book in books %} {% if borrow.bookid == book.id %}
+            <tr>
+                <td>{{ book.title }}</td>
+                {% for bow in users %}{% if borrow.userid == bow.id %}
+                <td>{{ bow.firstname }}</td>
+                <td>{{ bow.email }}</td>
+                {% endif %} {% endfor %}
 
+            </tr>
+            {% endif %} {% endfor %} {% endfor %}
+        </tbody>
+    </table>
 </div>
+
 {% endblock %}
