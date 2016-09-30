@@ -10,7 +10,6 @@
 <ul id="slide-out" class="side-nav fixed">
     <li>
         <div class="userView">
-            <!--<img class="background" src="{{ url_for('static', filename='img/librarypic.jpg') }}">-->
             <a href="#!user"><img class="rounded-image" src="{{user.avatar(user.email, 128)}}"></a>
             <a href="#!name"><span class="white-text name">{{user.firstname}} {{user.lastname}}</span></a>
             <a href="#!email"><span class="white-text email">{{user.email}}</span></a>
@@ -44,8 +43,7 @@
         <form action="{{ url_for('public.profile') }}" method="post">
             <div class="col m6 s12">
                 <dl>
-                    {{ render_field(form.firstname) }} 
-                    {{ render_field(form.lastname) }} 
+                    {{ render_field(form.firstname) }} {{ render_field(form.lastname) }}
                 </dl>
             </div>
             <div class="row">
@@ -60,4 +58,3 @@
     </div>
 </div>
 {% endblock %}
-

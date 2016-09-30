@@ -18,7 +18,6 @@ body {
 
 main {
     flex: 1 0 auto;
-    /*padding-top: 80px;*/
 }
 
 @media screen and (min-width: 760px) {
