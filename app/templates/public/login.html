@@ -1,30 +1,32 @@
 {% extends "public/loginbase.html" %} {% block content %} {% from "public/_formhelpers.html" import render_field %}
-<div class="container">
-    <div class="login-form z-depth-2">
-        <div class="row">
-            <h3 class="center-align">Login Form</h3>
-        </div>
-        {% if failure %}
-        <p class=errors><strong>Error:</strong> {{ failure }}</p>
-        {% endif %}
-        <form action="{{ url_for('public.login') }}" method="post">
-            <div class="col m6 s12">
-                <dl>
-                    {{ render_field(form.email) }} {{ render_field(form.password) }}
-                </dl>
-            </div>
+<main>
+    <div class="container">
+        <div class="login-form z-depth-2">
             <div class="row">
-                <div class="login-buttons">
-                    <div class="col s6">
-                        <button class="waves-effect waves-light btn" id="login">login</button>
-                    </div>
-                    <div class="col s6">
-                        <a type="button" class="waves-effect waves-light blue btn" href="{{ url_for('public.register')}}" id="signup">Signup</a>
+                <h3 class="center-align">Login Form</h3>
+            </div>
+            {% if failure %}
+            <p class=errors><strong>Error:</strong> {{ failure }}</p>
+            {% endif %}
+            <form action="{{ url_for('public.login') }}" method="post">
+                <div class="col m6 s12">
+                    <dl>
+                        {{ render_field(form.email) }} {{ render_field(form.password) }}
+                    </dl>
+                </div>
+                <div class="row">
+                    <div class="login-buttons">
+                        <div class="col s6">
+                            <button class="waves-effect waves-light btn" id="login">login</button>
+                        </div>
+                        <div class="col s6">
+                            <a type="button" class="waves-effect waves-light blue btn" href="{{ url_for('public.register')}}" id="signup">Signup</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            {{ form.csrf_token }}
-        </form>
+                {{ form.csrf_token }}
+            </form>
+        </div>
     </div>
-</div>
+</main>
 {% endblock %}

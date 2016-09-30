@@ -16,7 +16,7 @@
 </head>
 
 <body>
-    <header>
+    <header style="padding-left:300px;">
         <nav class="lime lighten-2">
             <div class="container">
                 <div class="nav-wrapper">
@@ -27,9 +27,7 @@
                         <li><a href="{{ url_for('public.books')}}">BOOKS</a></li>
                         {% if g.user.is_authenticated == False %}
                         <li><a href="{{ url_for('public.login')}}">LOG IN</a></li>
-                        <li><a href="{{ url_for('public.register')}}">SIGN UP</a></li>
-                        {% endif %} 
-                        {% if g.user.is_authenticated %}
+                        {% endif %} {% if g.user.is_authenticated %}
                         <li>
                             <a class="dropdown-button" href="#!" data-activates="dropdown-home-menu">
                                 <img class="circle" src="{{ user.avatar(user.email, 36) }}" />
@@ -48,21 +46,19 @@
             </div>
         </nav>
     </header>
-    <main>
+    <main style="padding-left: 300px;">
         {% block content %} {% endblock %}
     </main>
-    <footer class=" page-footer blue-grey darken-3">
+    <footer class=" page-footer blue-grey darken-3" style="padding-left:300px;">
         <div class="container">
         </div>
         <div class="footer-copyright">
-            <div class="container">
-                <div class="row">
-                    <div class="col s7 push-s5">
-                        <p class="right-align"> Designed by Vonj Designs <span>08138120185</span></p>
-                    </div>
-                    <div class="col s5 pull-s7">
-                        <p class="left-align"><i class="small material-icons">copyright</i>2016 All rights reserved. </p>
-                    </div>
+            <div class="row">
+                <div class="col s7 push-s5">
+                    <p class="right-align"> Designed by Vonj Designs <span>08138120185</span></p>
+                </div>
+                <div class="col s5 pull-s7">
+                    <p class="left-align"><i class="small material-icons">copyright</i>2016 All rights reserved. </p>
                 </div>
             </div>
         </div>

@@ -2,6 +2,14 @@
     width: 80%;
 }
 
+@media only screen and (max-width: 992px) {
+    header,
+    main,
+    footer {
+        padding-left: 0;
+    }
+}
+
 body {
     display: flex;
     min-height: 100vh;
@@ -67,4 +75,45 @@ input {
     color: #333333;
     display: inline-block;
     font-size: 1.2rem;
+}
+
+.active ul {
+    top: auto !important;
+}
+
+#slide-out {
+    background-color: darkslategray;
+    overflow-y: hidden;
+}
+
+.side-nav a {
+    padding: none;
+    margin-left: 30px;
+}
+
+.side-nav li {
+    list-style: none;
+}
+
+.side-nav {
+    top: 0;
+    left: 0;
+}
+
+.rounded-image {
+    border-radius: 50%;
+}
+
+.hidden {
+    visibility: hidden;
+    display: none;
+}
+
+#edit-profile {
+    padding: 20px;
+}
+
+#show-profile {
+    padding-top: 30px;
+    margin: auto;
 }

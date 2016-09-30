@@ -1,31 +1,37 @@
 # app/models.py
 
 from datetime import datetime
-from app import app
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from hashlib import md5
+from app import app
 db = SQLAlchemy(app)
 
 
-# class Base(db.Model):
+class Base(db.Model):
 
-#     # saves the data
-#     def save(self):
-#         db.session.add(self)
-#         db.session.commit()
+    __abstract__ = True
+
+    # saves the data
+    @staticmethod
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
     
-#     # updates the data
-#     def update(self):
-#         db.session.commit()
+    # updates the data
+    @staticmethod
+    def update():
+        db.session.commit()
 
-#     # deletes the data
-#     def delete(self):
-#         db.session.add(self)
-#         db.session.delete(self)
-#         db.session.commit()
+    # deletes the data
+    @staticmethod
+    def delete(self):
+        db.session.add(self)
+        db.session.delete(self)
+        db.session.commit()
 
-class Users(db.Model):
+class Users(Base):
 
     __tablename__ = 'users'
 
@@ -68,6 +74,13 @@ class Users(db.Model):
         return unicode(self.id)
 
     @staticmethod
+    def avatar(email, size):
+        return 'http://www.gravatar.com/avatar/%s?d=mm&s=%d' %(md5(email.encode('utf-8')).hexdigest(), size)
+
+
+
+
+    @staticmethod
     def create_user(firstname, lastname, email, password):
         user = Users(
             firstname = firstname, 
@@ -78,30 +91,26 @@ class Users(db.Model):
         )
         checkuser = Users.query.filter_by(email = email).first()
         if checkuser == None:
-            # user.save()
-            db.session.add(user)
-            db.session.commit()
+            user.save()
             return user
         else:
             return None
 
     @staticmethod
     def get_user(email, password):
-        users = Users.query.filter_by(email = email).first()
-        if users == None:
+        user = Users.query.filter_by(email = email).first()
+        if user == None:
             return None
-        if check_password_hash(users.pwdhash, password) == False:
+        if check_password_hash(user.pwdhash, password) == False:
             return None
-        return users
+        return user
 
     @staticmethod
     def delete_user(email):
         user = Users.query.filter_by(email = email).first()
         if user == None:
             return None
-        # user.delete()
-        db.session.delete(user)
-        db.session.commit()
+        user.delete()
         return users
 
     @staticmethod
@@ -128,7 +137,10 @@ class User(UserMixin):
     def get_id(self):
         return unicode(self.id)
 
-class Books(db.Model):
+    def avatar(self, size):
+        return 'http://www.gravatar.com/avatar/%s?d=mm&s=%d' %(md5(self.email.encode('utf-8')).hexdigest(), size)
+
+class Books(Base):
 
     __tablename__ = 'books'
 
@@ -173,13 +185,7 @@ class Books(db.Model):
         )
         checkbook = Books.query.filter_by(title = title).first()
         if checkbook == None:
-            # book.save()
-            db.session.add(book)
-            db.session.commit()
-            return book
-        else:
-            checkbook.quantity += book.quantity
-            db.session.commit()
+            Books.save(book)
             return book
 
     @staticmethod
@@ -188,9 +194,7 @@ class Books(db.Model):
         if book == None:
             return None
         else:
-            # book.save()
-            db.session.delete(book)
-            db.session.commit()
+            Books.delete(book)
             return book
 
     @staticmethod
@@ -202,15 +206,11 @@ class Books(db.Model):
         book.isbn = isbn
         book.categoryid = categoryid
         book.quantity = quantity
-        db.session.commit()
-
+        book.update()
         return book
 
-    @staticmethod
-    def commit():
-        db.session.commit()
 
-class Categories(db.Model):
+class Categories(Base):
 
     __tablename__ = 'categories'
 
@@ -231,15 +231,11 @@ class Categories(db.Model):
         if checkcategory != None:
             return None
         else:
-            db.session.add(category)
-            db.session.commit()
+            Categories.save(category)
             return category
 
-    @staticmethod
-    def commit():
-        db.session.commit()
 
-class Borrowedbooks(db.Model):
+class Borrowedbooks(Base):
 
     __tablename__ = 'borrowedbooks'
     
@@ -276,8 +272,7 @@ class Borrowedbooks(db.Model):
             status = 'false', 
             timeborrowed = None
         )
-        db.session.add(borrow)
-        db.session.commit()
+        Borrowedbooks.save(borrow)
         return borrow
 
     @staticmethod
@@ -285,12 +280,8 @@ class Borrowedbooks(db.Model):
         borrowed = Borrowedbooks.checkborrowed(book,user)
         if borrowed:
             book.quantity = book.quantity + 1
-            edit = Books.commit()
+            book.update()
             borrowed.status = 'true'
             borrowed.timereturned = datetime.utcnow().replace(microsecond = 0)
-            save = Borrowedbooks.commit()
+            borrowed.update()
             return borrowed
-        
-    @staticmethod
-    def commit():
-        db.session.commit()

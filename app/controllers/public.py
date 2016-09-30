@@ -2,11 +2,11 @@
 
 from flask import Blueprint, render_template, redirect, url_for, request, flash, g, session
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required, UserMixin
+from flask_sqlalchemy import SQLAlchemy
 from app import app
 from app.forms import EmailPasswordForm, RegistrationForm
 from app.models import Users, Books, Categories, Borrowedbooks, User
 
-from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy(app)
 
 public = Blueprint('public', __name__)
@@ -74,12 +74,20 @@ def login():
     return render_template('public/login.html', form = form, user = g.user)
 
 
-@app.route('/profile/')
+@public.route('/profile/', methods = ['GET', 'POST'])
 @login_required
 def profile():
     user = g.user
-    person = Users.query.filter_by(email = user.email).first()
-    return render_template('public.profile.html', person = person, user = user)
+    person = Users.query.get(user.id)
+    form = RegistrationForm(obj=user)
+    if request.method == 'POST' and form.validate():
+        person.firstname = request.form['firstname']
+        person.lastname = request.form['lastname']
+        # person.email = request.form['email']
+        # person.password = request.form['password']
+        edit = Users.update()
+        return redirect(url_for('public.dashboard'))
+    return render_template('public/profile.html', person = person, user = user, form = form)
     
 
 @public.route('/dashboard/')
@@ -117,7 +125,7 @@ def borrow(title):
             return render_template('public/books.html', failure = failure, user = user)
         borrowbook = Borrowedbooks.saveborrowed(book, user)
         book.quantity = book.quantity - 1
-        edit = Books.commit()
+        book.update()
         success = 'You have succesfully borrowed this book'
         return redirect(url_for('public.dashboard', success = success))
     failure ='Sorry the book is no longer available'

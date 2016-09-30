@@ -18,10 +18,15 @@
 <body>
     <header>
         <nav class="lime lighten-2">
-            <div class="nav-wrapper center-align">
-                <a href="{{ url_for('public.index')}}" class="brand-logo"> BOOKIE'S HUB </a>
+            <div class="nav-wrapper container">
+                <a href="{{ url_for('public.index')}}" class="brand-logo center"> BOOKIE'S HUB </a>
+                <ul id="nav-mobile" class="right hide-on-med-and-down">
+                    <li><a href="{{ url_for('public.index')}}">HOME</a></li>
+                </ul>
             </div>
         </nav>
+        <div style="margin: 10px;">
+        </div>
     </header>
     <main>
         {% block content %} {% endblock %}
@@ -36,7 +41,7 @@
                         <p class="right-align"> Designed by Vonj Designs <span>08138120185</span></p>
                     </div>
                     <div class="col s5 pull-s7">
-                        <p class="left-align"><i class="small material-icons">copyright</i>2016 All rights reserved. Morren-Xris Hotels Nigeria Limited.</p>
+                        <p class="left-align"><i class="small material-icons">copyright</i>2016 All rights reserved.</p>
                     </div>
                 </div>
             </div>

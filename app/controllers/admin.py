@@ -1,8 +1,8 @@
 # app/controllers/admin.py
 
 from flask import Blueprint, render_template, redirect, url_for, request, flash, g, session
-from functools import wraps
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required, UserMixin
+from functools import wraps
 from app import app
 from app.forms import EmailPasswordForm, RegistrationForm, BookForm, CategoryForm
 from app.models import Users, Books, Categories, Borrowedbooks, User
@@ -36,8 +36,6 @@ def index():
     user = g.user
     books = Books.query.all()
     users = Users.query.all()
-    # borrowed = Borrowedbooks.query.join(Borrowedbooks, Users.id==Borrowedbooks.userid).\
-    # add_columns(Users.firstname, Users.lastname, Users.email).filter_by(Borrowedbooks.status == 'false')
     borrowed = Borrowedbooks.query.filter_by(status = 'false')
     if borrowed is None:
         message = 'All books have been returned'
@@ -91,7 +89,7 @@ def editbook(id):
         book.isbn = request.form['isbn']
         book.categoryid = request.form.get('category')
         book.quantity = request.form['quantity']
-        edit = Books.commit()
+        edit = Books.update()
         return redirect(url_for('admin.books'))
     return render_template('admin/editbook.html', user = user, book = book, categories = categories, form = form)
 
@@ -142,7 +140,7 @@ def editcategory(id):
     form = CategoryForm(obj=category)
     if request.method == 'POST':
         category.name = request.form['name']
-        edit = Categories.commit()
+        edit = category.update()
         flash('The category has been successfully added')
         return redirect(url_for('admin.books'))
     return render_template('admin/editcategory.html', form = form, user = user, category = category)
