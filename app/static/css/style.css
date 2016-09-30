@@ -2,6 +2,14 @@
     width: 80%;
 }
 
+@media only screen and (max-width: 992px) {
+    header,
+    main,
+    footer {
+        padding-left: 0;
+    }
+}
+
 body {
     display: flex;
     min-height: 100vh;
@@ -10,7 +18,7 @@ body {
 
 main {
     flex: 1 0 auto;
-    padding-top: 80px;
+    /*padding-top: 80px;*/
 }
 
 @media screen and (min-width: 760px) {
@@ -45,4 +53,67 @@ dd {
 
 input {
     height: 30px;
+}
+
+.intro {
+    text-align: center;
+    padding-top: 13%;
+    padding-bottom: 13%;
+    margin-bottom: 50px;
+    background: url("landing.jpg") center center fixed;
+}
+
+.intro h1 {
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.intro h5 {
+    text-transform: uppercase;
+    background-color: #f5f5f5;
+    padding: 10px;
+    color: #333333;
+    display: inline-block;
+    font-size: 1.2rem;
+}
+
+.active ul {
+    top: auto !important;
+}
+
+#slide-out {
+    background-color: darkslategray;
+    overflow-y: hidden;
+}
+
+.side-nav a {
+    padding: none;
+    margin-left: 30px;
+}
+
+.side-nav li {
+    list-style: none;
+}
+
+.side-nav {
+    top: 0;
+    left: 0;
+}
+
+.rounded-image {
+    border-radius: 50%;
+}
+
+.hidden {
+    visibility: hidden;
+    display: none;
+}
+
+#edit-profile {
+    padding: 20px;
+}
+
+#show-profile {
+    padding-top: 30px;
+    margin: auto;
 }

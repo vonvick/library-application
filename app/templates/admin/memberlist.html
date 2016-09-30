@@ -1,0 +1,24 @@
+{% extends "admin/adminbase.html" %} {% block content %}
+<h3 class="center-align"> Members </h3>
+
+<table class="striped centered responsive-table">
+    <thead>
+        <tr>
+            <th data-field="id">First Name</th>
+            <th data-field="name">Last Name</th>
+            <th data-field="price">Email</th>
+            <th data-field="role">Role</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for member in members %}
+        <tr>
+            <td>{{ member.firstname }}</td>
+            <td>{{ member.lastname }}</td>
+            <td>{{ member.email }}</td>
+            <td>{{ member.role }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

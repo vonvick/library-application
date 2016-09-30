@@ -7,6 +7,7 @@ click==6.6
 decorator==4.0.10
 Flask==0.11.1
 Flask-Bcrypt==0.7.1
+Flask-Gravatar==0.4.2
 Flask-Login==0.3.2
 Flask-Mail==0.9.1
 Flask-Migrate==1.8.0

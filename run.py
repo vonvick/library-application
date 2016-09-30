@@ -1,7 +1,10 @@
 #!flask/bin/python
 
-from app import app
+
 import os
+from app import app
+
 
 if os.environ.get('APP_SETTINGS') == 'config.DevelopmentConfig':
     app.run()
+

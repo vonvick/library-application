@@ -19,8 +19,8 @@
     <header>
         <nav class="lime lighten-2">
             <!--<div class="container">-->
-            <div class="nav-wrapper center-align">
-                <a href="{{ url_for('admin.index')}}" class="brand-logo"> Bookie's Hub </a>
+            <div class="nav-wrapper">
+                <a href="{{ url_for('admin.index')}}" class="brand-logo center"> BOOKIE'S HUB </a>
             </div>
             <!--</div>-->
         </nav>
@@ -30,12 +30,13 @@
             <li>
                 <div class="userView">
                     <img class="background" src="{{ url_for('static', filename='img/librarypic.jpg')}}">
-                    <a href="#!user"><img class="circle" src="{{ url_for('static', filename='img/avatar.png')}}"></a>
-                    <a href="#!name"><span class="white-text name">{{user.firstname}} {{user.lastname}}</span></a>
-                    <a href="#!email"><span class="white-text email">{{user.email}} and {{user.id}}</span></a>
+                    <a href="#!user"><img class="circle" src="{{ user.avatar(user.email, 128)}}"></a>
+                    <a href="#!name"><span class="white-text name">{{user.firstname}} {{user.lastname}} ({{user.role}})</span></a>
+                    <a href="#!email"><span class="white-text email">{{user.email}}</span></a>
                 </div>
             </li>
-            <li><a class="modal-trigger waves-effect waves-light" href="#!">MEMBERS</a></li>
+            <li><a class="modal-trigger waves-effect waves-light" href="{{ url_for('admin.index')}}">UNRETURNED BOOKS</a></li>
+            <li><a class="modal-trigger waves-effect waves-light" href="{{ url_for('admin.members')}}">MEMBERS</a></li>
             <li><a class="modal-trigger waves-effect waves-light" href="{{ url_for('admin.books')}}">BOOKS</a></li>
             <li><a class="modal-trigger waves-effect waves-light" href="{{url_for('admin.addbook')}}">ADD A BOOK</a></li>
             <li><a class="modal-trigger waves-effect waves-light" href="{{ url_for('admin.createcategory')}}">CREATE CATEGORY</a></li>
@@ -48,14 +49,12 @@
         <div class="container">
         </div>
         <div class="footer-copyright">
-            <div class="container">
-                <div class="row">
-                    <div class="col s7 push-s5">
-                        <p class="right-align"> Designed by Vonj Designs <span>08138120185</span></p>
-                    </div>
-                    <div class="col s5 pull-s7">
-                        <p class="left-align"><i class="small material-icons">copyright</i>2016 All rights reserved. Vonj Design Creation.</p>
-                    </div>
+            <div class="row">
+                <div class="col s7 push-s5">
+                    <p class="right-align"> Designed by Vonj Designs <span>08138120185</span></p>
+                </div>
+                <div class="col s5 pull-s7">
+                    <p class="left-align"><i class="small material-icons">copyright</i>2016 All rights reserved.</p>
                 </div>
             </div>
         </div>
