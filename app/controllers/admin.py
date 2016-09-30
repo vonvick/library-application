@@ -89,7 +89,7 @@ def editbook(id):
         book.isbn = request.form['isbn']
         book.categoryid = request.form.get('category')
         book.quantity = request.form['quantity']
-        edit = Books.update()
+        Books.update()
         return redirect(url_for('admin.books'))
     return render_template('admin/editbook.html', user = user, book = book, categories = categories, form = form)
 
