@@ -14,6 +14,7 @@ public = Blueprint('public', __name__)
 @app.before_request
 def before_request():
     g.user = current_user
+
 """
     The routes are the routes for the front end of the application
     the user with a role == 'user' can view these routes
@@ -80,12 +81,10 @@ def profile():
     user = g.user
     person = Users.query.get(user.id)
     form = RegistrationForm(obj=user)
-    if request.method == 'POST' and form.validate():
+    if request.method == 'POST':
         person.firstname = request.form['firstname']
         person.lastname = request.form['lastname']
-        # person.email = request.form['email']
-        # person.password = request.form['password']
-        edit = Users.update()
+        Users.update()
         return redirect(url_for('public.dashboard'))
     return render_template('public/profile.html', person = person, user = user, form = form)
     
