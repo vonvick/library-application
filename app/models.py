@@ -91,7 +91,7 @@ class Users(Base):
         )
         checkuser = Users.query.filter_by(email = email).first()
         if checkuser == None:
-            user.save()
+            Users.save(user)
             return user
         else:
             return None
