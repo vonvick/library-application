@@ -102,11 +102,15 @@ def uploadpic():
         if file:
             upload_result = upload(file)
             old_url = person.imagepath
-            old_image_name = old_url.split('/')[-1].split('.')[0]
-            delete_old_image = delete_resources([old_image_name])
             imageurl = upload_result['url']
-            person.imagepath = imageurl
-            Users.update()
+            if old_url is None:
+                person.imagepath = imageurl
+                Users.update()
+            else:
+                old_image_name = old_url.split('/')[-1].split('.')[0]
+                delete_old_image = delete_resources([old_image_name])
+                person.imagepath = imageurl
+                Users.update()
             return redirect(url_for('public.profile'))
     return render_template('public/picture_upload.html', user = user, form = form)
 
