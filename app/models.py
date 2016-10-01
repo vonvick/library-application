@@ -78,9 +78,6 @@ class Users(Base):
     def avatar(email, size):
         return 'http://www.gravatar.com/avatar/%s?d=mm&s=%d' %(md5(email.encode('utf-8')).hexdigest(), size)
 
-
-
-
     @staticmethod
     def create_user(firstname, lastname, email, password):
         user = Users(
@@ -90,8 +87,8 @@ class Users(Base):
             password = password,
             role = 'user'
         )
-        checkuser = Users.query.filter_by(email = email).first()
-        if checkuser == None:
+        check_user = Users.query.filter_by(email = email).first()
+        if check_user == None:
             Users.save(user)
             return user
         else:
@@ -184,8 +181,8 @@ class Books(Base):
             categoryid = categoryid,
             quantity = quantity
         )
-        checkbook = Books.query.filter_by(title = title).first()
-        if checkbook == None:
+        check_book = Books.query.filter_by(title = title).first()
+        if check_book == None:
             Books.save(book)
             return book
 
@@ -218,7 +215,7 @@ class Categories(Base):
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(120), index = True, unique = True)
     books = db.relationship('Books', backref = 'categories', cascade='all, delete-orphan', lazy = 'dynamic')
-    
+
     def __init__(self, name):
         self.name = name
 
@@ -228,8 +225,8 @@ class Categories(Base):
     @staticmethod
     def create_category(name):
         category = Categories(name)
-        checkcategory = Categories.query.filter_by(name = name).first()
-        if checkcategory != None:
+        check_category = Categories.query.filter_by(name = name).first()
+        if check_category != None:
             return None
         else:
             Categories.save(category)
@@ -239,14 +236,14 @@ class Categories(Base):
 class Borrowedbooks(Base):
 
     __tablename__ = 'borrowedbooks'
-    
+
     id = db.Column(db.Integer, primary_key = True)
     bookid = db.Column(db.Integer, db.ForeignKey('books.id'))
     userid = db.Column(db.Integer, db.ForeignKey('users.id'))
     status = db.Column(db.String(30), index = True)
     timeborrowed = db.Column(db.DateTime, server_default = db.func.now())
     timereturned = db.Column(db.DateTime, nullable = True)
-    
+
     def __init__(self, books, users, status = 'false', timeborrowed = None):
         self.bookid = books.id
         self.userid = users.id
@@ -258,15 +255,15 @@ class Borrowedbooks(Base):
         return '<Books %r>' % (self.bookid)
 
     @staticmethod
-    def checkborrowed(book, user):
-        borrowedlist = Borrowedbooks.query.filter(Borrowedbooks.status == 'false' and \
-            Borrowedbooks.userid == user.id and \
-            Borrowedbooks.bookid == book.id).first()
-        if borrowedlist:
-            return borrowedlist
+    def check_borrowed(book, user):
+        borrowed_list = Borrowedbooks.query\
+            .filter(Borrowedbooks.userid == user.id)\
+            .filter(Borrowedbooks.bookid == book.id)\
+            .filter(Borrowedbooks.status == 'false').first()
+        return borrowed_list
 
     @staticmethod
-    def saveborrowed(book, user):
+    def save_borrowed(book, user):
         borrow = Borrowedbooks(
             books = book, 
             users = user, 
@@ -277,8 +274,8 @@ class Borrowedbooks(Base):
         return borrow
 
     @staticmethod
-    def returnborrowed(book, user):
-        borrowed = Borrowedbooks.checkborrowed(book,user)
+    def return_borrowed(book, user):
+        borrowed = Borrowedbooks.check_borrowed(book,user)
         if borrowed:
             book.quantity = book.quantity + 1
             book.update()

@@ -30,7 +30,15 @@
             <li>
                 <div class="userView">
                     <img class="background" src="{{ url_for('static', filename='img/librarypic.jpg')}}">
-                    <a href="#!user"><img class="circle" src="{{ user.avatar(user.email, 128)}}"></a>
+                    <a href="#!user">
+                        {% if not user.imagepath %}
+                        <img class="rounded-image profile" src="{{user.avatar(user.email, 128)}}" />
+                        {% endif %}
+
+                        {% if user.imagepath %}
+                        <img class="rounded-image profile" src="{{user.imagepath}}" />
+                        {% endif %}
+                    </a>
                     <a href="#!name"><span class="white-text name">{{user.firstname}} {{user.lastname}} ({{user.role}})</span></a>
                     <a href="#!email"><span class="white-text email">{{user.email}}</span></a>
                 </div>

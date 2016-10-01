@@ -58,7 +58,7 @@ class CategoryForm(Form):
     ])
 
 class UploadForm(Form):
-    file = FileField('Select an Image to upload', validators=[
+    file = FileField('.', validators=[
         FileRequired(),
         FileAllowed(['jpg', 'png'], 'Images only!')
     ])
