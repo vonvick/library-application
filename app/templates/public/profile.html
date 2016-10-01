@@ -2,15 +2,19 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $("#show-edit-form").on('click', function() {
-            $("#edit-profile").removeClass("hidden");
+            $('#edit-profile').removeClass("hidden");
             $('#show-profile').addClass('hidden');
+        });
+        $('#back-profile-button').on('click', function() {
+            $('#edit-profile').addClass("hidden");
+            $('#show-profile').removeClass('hidden');
         });
     });
 </script>
 <ul id="slide-out" class="side-nav fixed">
     <li>
         <div class="userView">
-            <a href="#!user"><img class="rounded-image" src="{{user.avatar(user.email, 128)}}"></a>
+            <a href="#!user"><img class="rounded-image profile" src="{{user.imagepath}}"></a>
             <a href="#!name"><span class="white-text name">{{user.firstname}} {{user.lastname}}</span></a>
             <a href="#!email"><span class="white-text email">{{user.email}}</span></a>
         </div>
@@ -26,11 +30,12 @@
 <div class="container">
     <div id="show-profile">
         <div class="row center-align">
-            <img class="rounded-image" src="{{ user.avatar(user.email, 256)}}" />
+            <img class="rounded-image profile" src="{{ user.imagepath}}" />
             <p class="flow-text">First Name: {{ user.firstname }} </p>
             <p class="flow-text">Last Name: {{ user.lastname }} </p>
             <p class="flow-text">Email: {{ user.email }} </p>
             <button class="waves-effect waves-light btn purple" id="show-edit-form">Edit Profile</button>
+            <a class="waves-effect waves-light btn purple" href="{{url_for('public.uploadpic')}}">Change Picture</a>
         </div>
     </div>
     <div id="edit-profile" class="hidden z-depth-2">
@@ -48,8 +53,11 @@
             </div>
             <div class="row">
                 <div class="login-buttons">
-                    <div class="col s12">
+                    <div class="col s6">
                         <button class="waves-effect waves-light btn purple" id="edit-profile-button">Submit</button>
+                    </div>
+                    <div class="col s6">
+                        <a class="waves-effect waves-light btn purple" id="back-profile-button">Back</a>
                     </div>
                 </div>
             </div>

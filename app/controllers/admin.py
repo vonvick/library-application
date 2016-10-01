@@ -29,7 +29,6 @@ def admin_login(f):
 """
 
 @admin.route('/')
-@admin.route('/index/')
 @login_required
 @admin_login
 def index():
@@ -39,7 +38,6 @@ def index():
     borrowed = Borrowedbooks.query.filter_by(status = 'false')
     if borrowed is None:
         message = 'All books have been returned'
-        return render_template('admin/index.html', user = user, message = message)
     return render_template('admin/index.html', user = user, borrowed = borrowed, books = books, users = users)
 
 
@@ -64,10 +62,10 @@ def addbook():
         title = form.title.data
         author = form.author.data
         isbn = form.isbn.data
-        categoryid = request.form.get('category')
+        category_id = request.form.get('category')
         quantity = form.quantity.data
-        addbook = Books.create_book(title, author, isbn, categoryid, quantity)
-        if addbook == None:
+        add_book = Books.create_book(title, author, isbn, categoryid, quantity)
+        if add_book == None:
             failure = 'The book already exist'
             return render_template('admin/addbook', form = form, failure = failure, user = user)
         flash('The book has been successfully added')
@@ -122,8 +120,8 @@ def createcategory():
     form = CategoryForm()
     if request.method == 'POST' and form.validate:
         name = form.name.data
-        addcategory = Categories.create_category(name)
-        if addcategory == None:
+        add_category = Categories.create_category(name)
+        if add_category == None:
             failure = 'The Category already exist'
             return render_template('admin/addcategory.html', form = form, failure = failure, user = user)
         flash('The category has been successfully added')

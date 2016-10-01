@@ -30,12 +30,19 @@
                         {% endif %} {% if g.user.is_authenticated %}
                         <li>
                             <a class="dropdown-button" href="#!" data-activates="dropdown-home-menu">
-                                <img class="circle" src="{{ user.avatar(user.email, 36) }}" />
+                                {% if not user.imagepath %}
+                                <img class="circle header-profile" src="{{user.avatar(user.email, 36)}}" />
                                 <i class="material-icons right">arrow_drop_down</i>
+                                {% endif %}
+
+                                {% if user.imagepath %}
+                                <img class="circle header-profile" src="{{user.imagepath}}" />
+                                <i class="material-icons right">arrow_drop_down</i>
+                                {% endif %}
                             </a>
                             <ul id="dropdown-home-menu" class="dropdown-content active" style="top: auto;">
                                 <li><a href="{{ url_for('public.dashboard')}}">Dashboard</a></li>
-                                <li><a href="#!">Profile Settings</a></li>
+                                <li><a href="{{url_for('public.profile')}}">Profile Settings</a></li>
                                 <li class="divider"></li>
                                 <li><a href="{{ url_for('public.logout')}}">LOGOUT</a></li>
                             </ul>
