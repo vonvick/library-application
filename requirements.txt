@@ -4,6 +4,7 @@ bcrypt==3.1.1
 blinker==1.4
 cffi==1.8.3
 click==6.6
+cloudinary==1.4.0
 decorator==4.0.10
 Flask==0.11.1
 Flask-Bcrypt==0.7.1
