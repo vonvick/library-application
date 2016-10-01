@@ -103,6 +103,21 @@ input {
     border-radius: 50%;
 }
 
+.profile {
+    width: 128px;
+    height: 128px;
+}
+
+.header-profile {
+    width: 36px;
+    height: 36px;
+}
+
+.center-form {
+    margin: auto;
+    width: 80%;
+}
+
 .hidden {
     visibility: hidden;
     display: none;

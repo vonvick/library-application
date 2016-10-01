@@ -3,6 +3,7 @@
 from flask_wtf import Form
 from wtforms import StringField, PasswordField, IntegerField, validators
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
+from flask_wtf.file import FileField, FileAllowed, FileRequired
 from models import Categories
 
 class EmailPasswordForm(Form):
@@ -54,4 +55,10 @@ class CategoryForm(Form):
     name = StringField('Category Name', [
         validators.Length(min=2, max = 120),
         validators.DataRequired()
+    ])
+
+class UploadForm(Form):
+    file = FileField('.', validators=[
+        FileRequired(),
+        FileAllowed(['jpg', 'png'], 'Images only!')
     ])

@@ -44,11 +44,6 @@ main {
     padding: 30px;
 }
 
-
-/*.login-buttons {
-    margin: auto;
-}*/
-
 .errors {
     color: red;
     font-size: 12;
@@ -66,6 +61,15 @@ input {
     float: left;
     width: 20%;
     height: 100%;
+}
+
+.rounded-image {
+    border-radius: 50%;
+}
+
+.profile {
+    width: 128px;
+    height: 128px;
 }
 
 #content {

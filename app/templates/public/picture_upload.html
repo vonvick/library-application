@@ -1,0 +1,42 @@
+{% extends "public/dashboardbase.html" %} {% block content %} {% from "public/_formhelpers.html" import render_field %}
+<ul id="slide-out" class="side-nav fixed">
+    <li>
+        <div class="userView">
+            <a href="#!user"><img class="rounded-image profile" src="{{user.imagepath}}"></a>
+            <a href="#!name"><span class="white-text name">{{user.firstname}} {{user.lastname}}</span></a>
+            <a href="#!email"><span class="white-text email">{{user.email}}</span></a>
+        </div>
+    </li>
+    <li>
+        <div class="divider"></div>
+    </li>
+    <li><a class="waves-effect white-text" href="{{url_for('public.books')}}"><i class="material-icons white-text">book</i>Books</a></li>
+    <li><a class="waves-effect white-text" href="{{url_for('public.dashboard')}}"><i class="material-icons white-text">dashboard</i>Dashboard</a></li>
+    <li><a class="waves-effect white-text" href="{{url_for('public.profile')}}"><i class="material-icons white-text">settings</i>Profile Settings</a></li>
+    <li><a class="waves-effect white-text" href="{{url_for('public.logout')}}"><i class="material-icons white-text">exit_to_app</i>Log out</a></li>
+</ul>
+<div class="container">
+    <div class="center-form">
+        <h4>Upload a New Image</h4>
+        <form action="{{url_for('public.uploadpic')}}" method="post" enctype="multipart/form-data">
+            <div class="row">
+                <div class="file-field input-field">
+                    <div class="btn">
+                        <span>File</span>
+                        <input type="file">
+                    </div>
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text" placeholder="Click to select an image">
+                        {{ render_field(form.file)}}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="file-path-wrapper">
+                    <button class="waves-effect waves-light btn purple">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
