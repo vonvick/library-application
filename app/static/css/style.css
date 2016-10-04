@@ -27,9 +27,18 @@ main {
         padding: 30px;
     }
     .login-buttons {
-        width: 70%;
+        width: 100%;
         margin: auto;
     }
+}
+
+.login {
+    margin: auto;
+    width: 100%;
+}
+
+.login p {
+    font-size: 11px;
 }
 
 .login-form {

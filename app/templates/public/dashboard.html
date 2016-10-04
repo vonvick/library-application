@@ -18,46 +18,51 @@
     <li>
         <div class="divider"></div>
     </li>
-    <li><a class="waves-effect white-text" href="{{url_for('public.dashboard')}}"><i class="material-icons white-text">dashboard</i>Dashboard</a></li>
-    <li><a class="waves-effect white-text" href="{{url_for('public.books')}}"><i class="material-icons white-text">book</i>Books</a></li>
-    <li><a class="waves-effect white-text" href="{{url_for('public.profile')}}"><i class="material-icons white-text">settings</i>Profile Settings</a></li>
-    <li><a class="waves-effect white-text" href="{{url_for('public.logout')}}"><i class="material-icons white-text">exit_to_app</i>Log out</a></li>
+    <li>
+        <a class="waves-effect white-text" href="{{url_for('public.dashboard')}}">
+            <i class="material-icons white-text">dashboard</i>Dashboard</a>
+    </li>
+    <li>
+        <a class="waves-effect white-text" href="{{url_for('public.books')}}">
+            <i class="material-icons white-text">book</i>Books</a>
+    </li>
+    <li>
+        <a class="waves-effect white-text" href="{{url_for('public.profile')}}">
+            <i class="material-icons white-text">settings</i>Profile Settings</a>
+    </li>
+    <li>
+        <a class="waves-effect white-text" href="{{url_for('public.logout')}}">
+            <i class="material-icons white-text">exit_to_app</i>Log out</a>
+    </li>
 </ul>
 <h3 class="center-align">List of Borrowed Books</h3>
-{% if message %}
-<h3 class="errors center-align"><strong>Error:</strong> {{ message }}</h3>
-{% endif %}
+<h4 class="center-align"><span id="response"></span></h4>
 <div class="row">
-    {% for borrow in user_borrowed %} {% for book in books %} {% if borrow.bookid == book.id %}
-    <div class="col s6 m3">
-        <div class="card blue-grey darken-1">
-            <div class="card-content white-text">
-                <span class="card-title">{{ book.title[0:20] }}</span>
-                <p><strong>Author : </strong> {{ book.author }}</p>
-                {% for category in categories %} {% if category.id == book.categoryid %}
-                <p>
-                    <starong>Category : </strong>{{ category.name }}</p>
-                {% endif%} {% endfor %}
-                <p><strong>ISBN : </strong> {{ book.isbn }}</p>
-            </div>
-            {% if borrow.status == 'false' %}
-            <div class="card-action">
-                <a href="#{{book.id}}" class="modal-trigger">Return Book</a>
-            </div>
-            {% endif %}
-            <div id="{{book.id}}" class="modal">
-                <div class="modal-content">
-                    <h4>Return Book</h4>
-                    <p>You are about to return this book.</p>
-                    <p>Once the book is returned you will have to borrow it again to use it. You due amount will be displayed if you returned it late
-                    </p>
-                </div>
-                <div class="modal-footer">
-                    <a href="{{url_for('public.replace', title=book.title)}}" class=" modal-action modal-close waves-effect waves-green btn-flat">Return </a>
-                </div>
-            </div>
-        </div>
-    </div>
-    {% endif %} {% endfor %} {% endfor %}
+    <table class="striped centered responsive-table">
+        <thead>
+            <tr>
+                <th data-field="id">Book Title</th>
+                <th data-field="name">First Name</th>
+                <th data-field="price">Book ISBN</th>
+                <th data-field="role">Date Borrowed</th>
+                <th data-field="role">Date Returned</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for borrow in user_borrowed %}
+            <tr>
+                <td>{{ borrow.books.title }}</td>
+                <td>{{ borrow.books.author }}</td>
+                <td>{{ borrow.books.isbn }}</td>
+                <td>{{ borrow.timeborrowed }}</td>
+                {% if not borrow.timereturned %}
+                <td>Not returned</td>
+                {% else %}
+                <td>{{borrow.timereturned}}</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 {% endblock %}

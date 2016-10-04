@@ -1,6 +1,6 @@
 # app/controllers/public.py
 
-from flask import Blueprint, render_template, redirect, url_for, request, flash, g
+from flask import Blueprint, render_template, redirect, url_for, request, flash, g, jsonify
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required, UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from cloudinary.uploader import upload
@@ -120,49 +120,59 @@ def uploadpic():
 @login_required
 def dashboard():
     user = g.user
-    books = Books.query.all()
-    categories = Categories.query.all()
-    user_borrowed = Borrowedbooks.query.filter_by(userid = user.id)#.order_by(Borrowedbooks.timeborrowed)
+    user_borrowed = Borrowedbooks.query.join(Books, Borrowedbooks.bookid == Books.id)\
+        .filter(Borrowedbooks.userid == user.id)\
+        .order_by(Borrowedbooks.timeborrowed)
     if user_borrowed: 
-        return render_template('public/dashboard.html', user = user, books = books, user_borrowed = user_borrowed, categories = categories)
+        return render_template('public/dashboard.html', user = user, books = books,\
+            user_borrowed = user_borrowed)
     message = 'You do not have any books in your custody'
     return render_template('public/dashboard.html', user = user, message = message)
+
 
 @public.route('/books/')
 @login_required
 def books():
     user = g.user
-    books = Books.query.all()
-    categories = Categories.query.all()
-    return render_template('public/books.html', books = books, categories = categories, user = user)
+    books = Books.get_books_user(user.id)
+    return render_template('public/books.html', books = books,\
+        user = user)
 
 
-@public.route('/borrowbook/<string:title>')
+@public.route('/borrowbook/<int:id>')
 @login_required
-def borrow(title):
+def borrow(id):
     user = g.user
-    book = Books.get_book(title)
+    book = Books.get_book(id)
     not_returned = Borrowedbooks.check_borrowed(user, book)
     if book.quantity > 0:
         if not_returned:
             failure ='Sorry, you can not borrow this book as you '\
             'have not returned this book you collected before' 
-            return render_template('public/books.html', failure = failure, user = user)
-            return not_returned.status
+            data = {
+            'status': str(success),
+            'quantity': str(book.quantity)
+            }
+            return jsonify(data)
         borrow_book = Borrowedbooks.save_borrowed(book, user)
         book.quantity = book.quantity - 1
         book.update()
         success = 'You have succesfully borrowed this book'
-        return redirect(url_for('public.dashboard', success = success))
+        data = {
+            'status': str(success),
+            'quantity': str(book.quantity)
+            }
+        return jsonify(data)
     failure ='Sorry the book is no longer available'
-    return render_template('public/books.html', user = user, failure = failure)
+    data = {'status': str(failure)}
+    return jsonify(data) 
 
 
-@public.route('/returnbook/<string:title>')
+@public.route('/returnbook/<int:id>')
 @login_required
-def replace(title):
+def replace(id):
     user = g.user
-    book = Books.get_book(title)
+    book = Books.get_book(id)
 
     ''' 
         checks if a borrowed book returned status is false 
@@ -171,8 +181,20 @@ def replace(title):
     returned = Borrowedbooks.return_borrowed(book, user)
     if returned:
         success = 'You have returned this book'
-        return redirect(url_for('public.dashboard', success = success))
-    return render_template('public/books.html', user = user)
+        quantity = Books.query.get(id).quantity
+        data = {
+            'status': str(success),
+            'quantity': str(quantity)
+            }
+        return jsonify(data)
+    failure = 'Your book could not be returned'
+    quantity = Books.query.get(title).quantity
+    data = {
+        'status': str(failure),
+        'quantity': str(quantity)
+        }
+    return jsonify(data)
+    # return render_template('public/books.html', user = user)
 
 @public.route("/logout/")
 @login_required

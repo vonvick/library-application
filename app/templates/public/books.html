@@ -1,33 +1,29 @@
 {% extends "public/base.html" %} {% block content %}
 <div class="container">
-    <h3 class="center-align"> List of Books </h3>
-    {% if failure %}
-    <p class=errors><strong>Error:</strong> {{ failure }}</p>
-    {% endif %}
     <div class="row">
-        {% if success %}
-        <p class=errors><strong>Congrats:</strong> {{ success }}</p>
-        {% endif %} {% for book in books %}
+        {% for book in books %}
         <div class="col s6 m3">
             <div class="card blue-grey darken-1">
                 <div class="card-content white-text">
                     <span class="card-title">{{ book.title[0:20] }}</span>
                     <p><strong>Author : </strong> {{ book.author }}
                     </p>
-                    {% for category in categories %} {% if category.id == book.categoryid %}
-                    <p>
-                        <starong>Category : </strong>
-                            {{ category.name }}
+                    <p><strong>Category : </strong> {{book.categories.name }}
                     </p>
-                    {% endif%} {% endfor %}
                     <p><strong>ISBN : </strong> {{ book.isbn }}
                     </p>
-                    <p><strong>Quantity :</strong> {{ book.quantity}}
+                    <p><strong>Quantity :</strong><span id="quantity{{book.id}}" class="quantity">{{ book.quantity}}</span>
                     </p>
                 </div>
+                {% if book.status == 'false' %}
+                <div class="card-action">
+                    <a href="#{{book.id}}b" class="modal-trigger">Return Book</a>
+                </div>
+                {% else %}
                 <div class="card-action">
                     <a href="#{{book.id}}a" class="modal-trigger">Borrow Book</a>
                 </div>
+                {% endif %}
                 <div id="{{book.id}}a" class="modal">
                     <div class="modal-content">
                         <h4>Borrow Book</h4>
@@ -36,7 +32,18 @@
                         </p>
                     </div>
                     <div class="modal-footer">
-                        <a href="{{url_for('public.borrow', title=book.title)}}" class=" modal-action modal-close waves-effect waves-green btn-flat">Borrow</a>
+                        <button data-book-id="{{book.id}}" class="borrow-btn modal-action modal-close waves-effect waves-green btn-flat">Borrow</button>
+                    </div>
+                </div>
+                <div id="{{book.id}}b" class="modal">
+                    <div class="modal-content">
+                        <h4>Return Book</h4>
+                        <p>You are about to return this book.</p>
+                        <p>You will not be able to read this book once it is returned
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button data-book-id="{{book.id}}" class="return-btn modal-action modal-close waves-effect waves-green btn-flat">Return</button>
                     </div>
                 </div>
             </div>
