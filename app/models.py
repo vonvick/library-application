@@ -116,6 +116,7 @@ class Users(Base):
         users = Users.query.all()
         return users
 
+
 class User(UserMixin):
     def __init__(self, id, firstname, email, role):
         self.id = id
@@ -138,6 +139,7 @@ class User(UserMixin):
     def avatar(self, size):
         return 'http://www.gravatar.com/avatar/%s?d=mm&s=%d' %(md5(self.email.encode('utf-8')).hexdigest(), size)
 
+
 class Books(Base):
 
     __tablename__ = 'books'
@@ -148,14 +150,16 @@ class Books(Base):
     isbn = db.Column(db.String(60), index = True, unique = True)
     categoryid = db.Column(db.Integer, db.ForeignKey('categories.id'))
     quantity = db.Column(db.Integer, index = True)
+    status = db.Column(db.String(60), index = True)
     bookborrowed = db.relationship('Borrowedbooks', backref = 'books', cascade='all, delete-orphan', lazy = 'dynamic')
     
-    def __init__(self, title, author, isbn, categoryid, quantity):
+    def __init__(self, title, author, isbn, categoryid, quantity, status = 'true'):
         self.title = title
         self.author = author
         self.isbn = isbn
         self.categoryid = categoryid
         self.quantity = quantity
+        self.status = status
 
     def __repr__(self):
         return '<Books %r>' % (self.title)
@@ -166,8 +170,8 @@ class Books(Base):
         return books
 
     @staticmethod
-    def get_book(title):
-        book = Books.query.filter_by(title = title).first()
+    def get_book(id):
+        book = Books.query.get(id)
         if book == None:
             return None
         return book
@@ -206,6 +210,21 @@ class Books(Base):
         book.quantity = quantity
         book.update()
         return book
+
+    @staticmethod
+    def get_books_user(userid):
+        result = []
+        books = Books.query.join(Categories, Books.categoryid == Categories.id)\
+            .order_by(Books.title).all()
+        user = Users.query.get(userid)
+        for book in books:
+            not_returned = Borrowedbooks.check_borrowed(book, user)
+            if not_returned:
+                book.status = 'false'
+                result.append(book)
+            else:
+                result.append(book)
+        return result
 
 
 class Categories(Base):
@@ -253,6 +272,13 @@ class Borrowedbooks(Base):
 
     def __repr__(self):
         return '<Books %r>' % (self.bookid)
+
+    @staticmethod
+    def get_user_history(user):
+        history = Borrowedbooks.query.join(Books, Borrowedbooks.bookid == Books.id)\
+            .filter(Borrowedbooks.userid == user.id)\
+            .order_by(Borrowedbooks.timeborrowed)
+        return history
 
     @staticmethod
     def check_borrowed(book, user):

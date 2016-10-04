@@ -15,13 +15,9 @@
                     </dl>
                 </div>
                 <div class="row">
-                    <div class="login-buttons">
-                        <div class="col s6">
-                            <button class="waves-effect waves-light btn" id="login">login</button>
-                        </div>
-                        <div class="col s6">
-                            <a type="button" class="waves-effect waves-light blue btn" href="{{ url_for('public.register')}}" id="signup">Signup</a>
-                        </div>
+                    <div class=" center-align login">
+                        <button class="waves-effect waves-light btn" id="login">login</button>
+                        <p class="center-align"><a href="{{ url_for('public.register')}}" id="signup">Or create an account?</a></p>
                     </div>
                 </div>
                 {{ form.csrf_token }}
