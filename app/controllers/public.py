@@ -18,10 +18,6 @@ public = Blueprint('public', __name__)
 def before_request():
     g.user = current_user
 
-"""
-    The routes are the routes for the front end of the application
-    the user with a role == 'user' can view these routes
-"""
 
 @public.route('/')
 def index():
@@ -70,10 +66,9 @@ def login():
         user = User(check_user.id, check_user.firstname, check_user.email, check_user.role)
         login_user(user)
         flash('Logged in Successfully')
-        next = request.args.get('index')
         if user.role == 'admin':
-            return redirect(next or url_for('admin.index'))
-        return redirect(next or url_for('public.dashboard'))
+            return redirect(url_for('admin.index'))
+        return redirect(url_for('public.dashboard'))
     return render_template('public/login.html', form = form, user = g.user)
 
 
@@ -120,13 +115,14 @@ def uploadpic():
 @login_required
 def dashboard():
     user = g.user
-    user_borrowed = Borrowedbooks.query.join(Books, Borrowedbooks.bookid == Books.id)\
-        .filter(Borrowedbooks.userid == user.id)\
-        .order_by(Borrowedbooks.timeborrowed)
+    user_borrowed = Borrowedbooks.get_user_history(user)
     if user_borrowed: 
         return render_template('public/dashboard.html', user = user, books = books,\
             user_borrowed = user_borrowed)
-    message = 'You do not have any books in your custody'
+    else:
+        message = 'You do not have any books in your custody'
+        data = {'status': str(message)}
+        return jsonify(data)
     return render_template('public/dashboard.html', user = user, message = message)
 
 
@@ -194,15 +190,9 @@ def replace(id):
         'quantity': str(quantity)
         }
     return jsonify(data)
-    # return render_template('public/books.html', user = user)
 
 @public.route("/logout/")
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('public.login'))
-
-
-# @public.route('/admin/login')
-# def admin_login():
-#     return redirect(url_for('admin.login'))

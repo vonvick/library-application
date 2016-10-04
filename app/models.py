@@ -116,6 +116,7 @@ class Users(Base):
         users = Users.query.all()
         return users
 
+
 class User(UserMixin):
     def __init__(self, id, firstname, email, role):
         self.id = id
@@ -271,6 +272,13 @@ class Borrowedbooks(Base):
 
     def __repr__(self):
         return '<Books %r>' % (self.bookid)
+
+    @staticmethod
+    def get_user_history(user):
+        history = Borrowedbooks.query.join(Books, Borrowedbooks.bookid == Books.id)\
+            .filter(Borrowedbooks.userid == user.id)\
+            .order_by(Borrowedbooks.timeborrowed)
+        return history
 
     @staticmethod
     def check_borrowed(book, user):

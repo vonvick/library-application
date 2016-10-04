@@ -25,7 +25,6 @@
                 <div class="nav-wrapper">
                     <a href="{{ url_for('public.index')}}" class="brand-logo"> BOOKIE'S HUB </a>
                     <ul id="nav-mobile" class="right hide-on-med-and-down">
-
                         <li><a href="{{ url_for('public.index')}}">HOME</a></li>
                         <li><a href="{{ url_for('public.books')}}">BOOKS</a></li>
                         {% if g.user.is_authenticated == False %}
