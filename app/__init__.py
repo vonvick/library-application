@@ -1,6 +1,7 @@
 # app/__init__.py
 
 import os
+
 from flask import Flask
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
@@ -11,12 +12,15 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 from app.controllers.admin import admin
 from app.controllers.public import public
+from app.controllers.social import social
+
 from app import models
-from .models import Users
+from .models import User
 
 
 app.register_blueprint(admin)
 app.register_blueprint(public)
+app.register_blueprint(social)
 
 db = SQLAlchemy(app)
 
@@ -26,6 +30,6 @@ login_manager.login_view = 'public.login'
 
 @login_manager.user_loader
 def load_user(user_id):
-    user = Users.query.get(int(user_id))
+    user = User.query.get(int(user_id))
     return user
 

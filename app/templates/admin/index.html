@@ -14,19 +14,15 @@
             </tr>
         </thead>
         <tbody>
-            {% for borrow in borrowed %} {% for book in books %} {% if borrow.bookid == book.id %}
+            {% for borrow in borrowed %}
             <tr>
-                <td>{{ book.title }}</td>
-                {% for borrowed_user in users %}{% if borrow.userid == borrowed_user.id %}
-                <td>{{ borrowed_user.firstname }}</td>
-                <td>{{ borrowed_user.email }}</td>
-                {% endif %} {% endfor %}
+                <td>{{ borrow.books.title }}</td>
+                <td>{{ borrow.users.firstname }}</td>
+                <td>{{ borrow.users.email }}</td>
                 <td>{{ borrow.timeborrowed }}</td>
-
             </tr>
-            {% endif %} {% endfor %} {% endfor %}
+            {% endfor %}
         </tbody>
     </table>
 </div>
-
 {% endblock %}
