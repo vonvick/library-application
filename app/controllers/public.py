@@ -116,8 +116,8 @@ def oauth_callback(provider):
         return redirect(url_for('public.login'))
     user=User.query.filter_by(email=email).first()
     if not user:
-        lastname = 'Testing'
-        password = 'bookiehub'
+        lastname = ''
+        password = ''
         if firstname is None or firstname == "":
             firstname = email.split('@')[0]
         user=User.create_user(firstname, lastname, email, password)
