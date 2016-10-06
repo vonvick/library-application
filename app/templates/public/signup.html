@@ -1,12 +1,11 @@
-{% extends "public/loginbase.html" %} {% block content %} {% from "public/_formhelpers.html" import render_field %}
+{% extends "public/loginbase.html" %} 
+{% block content %} 
+{% from "public/_formhelpers.html" import render_field %}
 <div class="container">
     <div class="login-form z-depth-2">
         <div class="row">
             <h3 class="center-align">Registration Form</h3>
         </div>
-        {% if failure %}
-        <p class=errors><strong>Error:</strong> {{ failure }}</p>
-        {% endif %}
         <form action="{{ url_for('public.register') }}" method="post">
             <div class="col m6 s12">
                 <dl>
@@ -20,7 +19,7 @@
             <div class="row">
                 <div class="login-buttons">
                     <div class="col s6">
-                        <button class="waves-effect waves-light btn" id="login">Register</button>
+                        <button class="waves-effect waves-light btn signup" id="login">Register</button>
                     </div>
                 </div>
             </div>

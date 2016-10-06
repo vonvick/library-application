@@ -1,5 +1,6 @@
-{% extends "admin/adminbase.html" %} {% block content %} {% from "admin/_formhelpers.html" import render_field %}
-<!--<div class="container">-->
+{% extends "admin/adminbase.html" %} 
+{% block content %} 
+{% from "admin/_formhelpers.html" import render_field %}
     <div class="login-form z-depth-2">
         <div class="row">
             <h3 class="center-align">Add a Book</h3>
@@ -7,8 +8,7 @@
         {% if failure %}
         <p class=errors><strong>Error:</strong> {{ failure }}</p>
         {% endif %}
-        <form action="{{ url_for('admin.addbook') }}" method="post">
-            <!--<div class="row">-->
+        <form action="{{ url_for('admin.addbook') }}" method="post" enctype="multipart/form-data">
             <div class="col m6 s12">
                 <dl>
                     {{ render_field(form.title) }} 
@@ -16,7 +16,18 @@
                     {{ render_field(form.isbn) }} 
                     {{ render_field(form.category) }} 
                     {{ render_field(form.quantity) }}
+                    {{ render_field(form.description) }}
                 </dl>
+                <div class="file-field input-field">
+                    <div class="btn">
+                        <span>File</span>
+                        <input type="file">
+                    </div>
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text" placeholder="Click to select an image">
+                        {{ render_field(form.file)}}
+                    </div>
+                </div>
             </div>
             <div class="row">
                 <div class="login-buttons">
@@ -28,5 +39,4 @@
             {{ form.csrf_token }}
         </form>
     </div>
-<!--</div>-->
 {% endblock %}

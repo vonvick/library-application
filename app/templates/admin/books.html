@@ -8,12 +8,10 @@
                 <span class="card-title">{{ book.title }}</span>
                 <p><strong>Author: </strong> {{ book.author }}
                 </p>
-                {% for category in categories %} {% if category.id == book.categoryid %}
                 <p>
                     <starong>Category: </strong>
-                        {{ category.name[0:20] }}
+                        {{ book.category.name[0:20] }}
                 </p>
-                {% endif%} {% endfor %}
                 <p><strong>ISBN: </strong> {{ book.isbn }}
                 </p>
                 <p><strong>Quantity :</strong> {{ book.quantity}}

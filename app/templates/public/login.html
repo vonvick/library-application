@@ -1,23 +1,39 @@
-{% extends "public/loginbase.html" %} {% block content %} {% from "public/_formhelpers.html" import render_field %}
+{% extends "public/loginbase.html" %} 
+{% block content %} 
+{% from "public/_formhelpers.html" import render_field %}
 <main>
     <div class="container">
         <div class="login-form z-depth-2">
             <div class="row">
                 <h3 class="center-align">Login Form</h3>
             </div>
-            {% if failure %}
-            <p class=errors><strong>Error:</strong> {{ failure }}</p>
-            {% endif %}
+            <h6 class="center-align">Fill in the form below and click the login button</h6>
             <form action="{{ url_for('public.login') }}" method="post">
                 <div class="col m6 s12">
                     <dl>
-                        {{ render_field(form.email) }} {{ render_field(form.password) }}
+                        {{ render_field(form.email) }} 
+                        {{ render_field(form.password) }}
                     </dl>
                 </div>
                 <div class="row">
                     <div class=" center-align login">
-                        <button class="waves-effect waves-light btn" id="login">login</button>
-                        <p class="center-align"><a href="{{ url_for('public.register')}}" id="signup">Or create an account?</a></p>
+                        <div class="row">
+                            <div class="col s12">
+                                <button class="waves-effect waves-light btn" id="login">login</button>
+                            </div>
+                        </div>
+                        <h6>OR</h6>
+                        <div class="row">
+                            <div class="col s12">
+                                <a class="waves-effect waves-yellow btn red" href="{{ url_for('public.oauth_authorize', provider='google') }}"><i class=" fa fa-google fa-lg "></i>  Log in with Google</a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s12">
+                                <a class="waves-effect waves-light btn blue" onclick="loginFacebook()"><i class=" fa fa-facebook fa-lg "></i>  Log in with Facebook</a>
+                            </div>
+                        </div>
+                        <p class="center-align "><a href="{{ url_for('public.register')}} " id="signup">Or create an account?</a></p>
                     </div>
                 </div>
                 {{ form.csrf_token }}
