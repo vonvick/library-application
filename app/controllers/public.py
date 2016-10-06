@@ -1,6 +1,6 @@
 # app/controllers/public.py
 
-from flask import Blueprint, render_template, redirect, url_for, request, flash, g, jsonify
+from flask import Blueprint, render_template, redirect, url_for, request, flash, g, jsonify, json
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required, UserMixin
 from flask_sqlalchemy import SQLAlchemy
 
@@ -71,6 +71,36 @@ def login():
         return redirect(url_for('public.dashboard'))
     return render_template('public/login.html', form=form, user=g.user)
 
+
+@public.route('/social/login', methods=['POST'])
+def social_login():
+    if g.user is not None and g.user.is_authenticated:
+        return redirect(url_for('public.dashboard'))
+    if request.method == 'POST':
+        json_dict = request.get_json()
+
+        email = json_dict['email']
+        firstname = json_dict['name'].split(' ')[0]
+        lastname = json_dict['name'].split(' ')[-1]
+        password = json_dict['id']
+        save_user = User.create_user(firstname, lastname, email, password)
+        if save_user == None:
+            is_user = User.get_user(email, password)
+            if is_user:
+                login_user(is_user)
+                success = 'You have successfully logged-in'
+                data = {
+                    'status': str(success),
+                }
+                return jsonify(data)
+        login_user(save_user)
+        success = 'You have successfully logged-in'
+        data = {
+            'status': str(success),
+        }
+        return jsonify(data)
+
+    
 
 @public.route('/profile/', methods=['GET', 'POST'])
 @login_required

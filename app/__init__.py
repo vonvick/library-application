@@ -12,7 +12,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 from app.controllers.admin import admin
 from app.controllers.public import public
-from app.controllers.social import social
 
 from app import models
 from .models import User
@@ -20,7 +19,6 @@ from .models import User
 
 app.register_blueprint(admin)
 app.register_blueprint(public)
-app.register_blueprint(social)
 
 db = SQLAlchemy(app)
 
