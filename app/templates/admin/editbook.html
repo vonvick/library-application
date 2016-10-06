@@ -1,11 +1,10 @@
-{% extends "admin/adminbase.html" %} {% block content %} {% from "admin/_formhelpers.html" import render_field %}
+{% extends "admin/adminbase.html" %} 
+{% block content %} 
+{% from "admin/_formhelpers.html" import render_field %}
 <div class="login-form z-depth-2">
     <div class="row">
         <h3 class="center-align">Edit Book</h3>
     </div>
-    {% if failure %}
-    <p class=errors><strong>Error:</strong> {{ failure }}</p>
-    {% endif %}
     <form action="{{ url_for('admin.editbook', id=book.id) }}" method="post" enctype="multipart/form-data">
         <div class="col m6 s12">
             <dl>

@@ -1,5 +1,6 @@
-{% extends "admin/adminbase.html" %} {% block content %} {% from "admin/_formhelpers.html" import render_field %}
-<!--<div class="container">-->
+{% extends "admin/adminbase.html" %} 
+{% block content %} 
+{% from "admin/_formhelpers.html" import render_field %}
     <div class="login-form z-depth-2">
         <div class="row">
             <h3 class="center-align">Add a Book</h3>
@@ -8,7 +9,6 @@
         <p class=errors><strong>Error:</strong> {{ failure }}</p>
         {% endif %}
         <form action="{{ url_for('admin.addbook') }}" method="post" enctype="multipart/form-data">
-            <!--<div class="row">-->
             <div class="col m6 s12">
                 <dl>
                     {{ render_field(form.title) }} 
@@ -39,5 +39,4 @@
             {{ form.csrf_token }}
         </form>
     </div>
-<!--</div>-->
 {% endblock %}
