@@ -4,14 +4,11 @@
         {% for book in books %}
         <div class="col s6 m3">
             <div class="card blue-grey darken-1">
+                <div class="card-image waves-effect waves-block waves-light">
+                    <img class="activator book-image " src="{{book.imagepath}}" />
+                </div>
                 <div class="card-content white-text">
-                    <span class="card-title">{{ book.title[0:20] }}</span>
-                    <p><strong>Author : </strong> {{ book.author }}
-                    </p>
-                    <p><strong>Category : </strong> {{book.categories.name }}
-                    </p>
-                    <p><strong>ISBN : </strong> {{ book.isbn }}
-                    </p>
+                    <span class="card-title">{{book.title}}</span>
                     <p><strong>Quantity :</strong><span id="quantity{{book.id}}" class="quantity">{{ book.quantity}}</span>
                     </p>
                 </div>
@@ -24,6 +21,17 @@
                     <a href="#{{book.id}}a" class="modal-trigger">Borrow Book</a>
                 </div>
                 {% endif %}
+                <div class="card-reveal">
+                    <span class="card-title grey-text text-darken-4">Summary<i class="material-icons right">close</i></span>
+                    <p><strong>Description : </strong>{{book.description}}
+                    </p>
+                    <p><strong>Author : </strong> {{ book.author }}
+                    </p>
+                    <p><strong>Category : </strong> {{book.category.name }}
+                    </p>
+                    <p><strong>ISBN : </strong> {{ book.isbn }}
+                    </p>
+                </div>
                 <div id="{{book.id}}a" class="modal">
                     <div class="modal-content">
                         <h4>Borrow Book</h4>

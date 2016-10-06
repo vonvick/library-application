@@ -2,9 +2,10 @@
 
 from flask_wtf import Form
 from wtforms import StringField, PasswordField, IntegerField, validators
+from wtforms.widgets import TextArea
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from flask_wtf.file import FileField, FileAllowed, FileRequired
-from models import Categories
+from models import Category
 
 class EmailPasswordForm(Form):
     email = StringField('Email', [
@@ -40,15 +41,20 @@ class BookForm(Form):
     ])
     isbn = StringField('ISBN', [
         validators.Length(min = 6, max = 60), 
-        validators.Email(),
         validators.DataRequired()
     ])
-    category = QuerySelectField(query_factory=lambda: Categories.query.all(),
+    category = QuerySelectField(query_factory=lambda: Category.query.all(),
         get_label = 'name'
     )
-
+    description = StringField('Description', widget=TextArea())
+    
     quantity = IntegerField('Enter the quantity', [
         validators.DataRequired()
+    ])
+
+    file = FileField('.', validators=[
+        FileRequired(),
+        FileAllowed(['jpg', 'png'], 'Images only!')
     ])
 
 class CategoryForm(Form):
