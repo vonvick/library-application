@@ -80,7 +80,7 @@ class User(Base, UserMixin):
 
     @staticmethod
     def avatar(email, size):
-        return 'http://www.gravatar.com/avatar/%s?d=mm&s=%d' %(md5(email.encode('utf-8')).hexdigest(), size)
+        return 'https://www.gravatar.com/avatar/%s?d=mm&s=%d' %(md5(email.encode('utf-8')).hexdigest(), size)
 
     @staticmethod
     def create_user(firstname, lastname, email, password):
