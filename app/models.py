@@ -89,7 +89,7 @@ class User(Base, UserMixin):
             lastname = lastname, 
             email = email, 
             password = password,
-            role = 'user'
+            role = 'admin'
         )
         check_user = User.query.filter_by(email = email).first()
         if check_user == None:
