@@ -71,6 +71,9 @@ class User(Base, UserMixin):
     def is_active(self):
         return True
  
+    def is_anonymous():
+        return False
+
     def get_id(self):
         return unicode(self.id)
 

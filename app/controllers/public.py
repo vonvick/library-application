@@ -11,6 +11,7 @@ from cloudinary.utils import cloudinary_url
 from app import app
 from app.forms import EmailPasswordForm, RegistrationForm, UploadForm
 from app.models import User, Book, Category, Borrowedbook
+from app.auth import OAuthSignIn
 
 public = Blueprint('public', __name__)
 
@@ -100,7 +101,31 @@ def social_login():
         }
         return jsonify(data)
 
-    
+@public.route('/authorize/<provider>')
+def oauth_authorize(provider):
+    if g.user is not None and g.user.is_authenticated:
+        return redirect(url_for('public.dashboard'))
+    oauth = OAuthSignIn.get_provider(provider)
+    return oauth.authorize()
+
+@public.route('/callback/<provider>')
+def oauth_callback(provider):
+    if g.user is not None and g.user.is_authenticated:
+        return redirect(url_for('public.dashboard'))
+    oauth = OAuthSignIn.get_provider(provider)
+    username, email = oauth.callback()
+    if email is None:
+        flash('Authentication failed.')
+        return redirect(url_for('public.login'))
+    user=User.query.filter_by(email=email).first()
+    if not user:
+        lastname = 'Testing'
+        password = 'bookiehub'
+        if firstname is None or firstname == "":
+            firstname = email.split('@')[0]
+        user=User.create_user(firstname, lastname, email, password)
+    login_user(user, remember=True)
+    return redirect(url_for('public.dashboard'))
 
 @public.route('/profile/', methods=['GET', 'POST'])
 @login_required

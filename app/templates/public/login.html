@@ -17,6 +17,7 @@
                 <div class="row">
                     <div class=" center-align login">
                         <button class="waves-effect waves-light btn" id="login">login</button>
+                        <a class="waves-effect waves-light btn green" href="{{ url_for('public.oauth_authorize', provider='google') }}"><i class=" fa fa-google fa-lg "></i>Log in with Google</a>
                         <a class="waves-effect waves-light btn blue" onclick="loginFacebook()"><i class=" fa fa-facebook fa-lg "></i> Log in with Facebook</a>
                         <p class="center-align "><a href="{{ url_for( 'public.register')}} " id="signup ">Or create an account?</a></p>
                     </div>
