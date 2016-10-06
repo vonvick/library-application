@@ -3,6 +3,11 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash, g, session
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required, UserMixin
 from functools import wraps
+
+from cloudinary.uploader import upload
+from cloudinary.api import delete_resources
+from cloudinary.utils import cloudinary_url
+
 from app import app
 from app.forms import EmailPasswordForm, RegistrationForm, BookForm, CategoryForm
 from app.models import User, Book, Category, Borrowedbook
@@ -62,11 +67,18 @@ def addbook():
         author = form.author.data
         isbn = form.isbn.data
         category_id = request.form.get('category')
+        description = form.description.data
         quantity = form.quantity.data
-        add_book = Book.create_book(title, author, isbn, category_id, quantity)
+        file = request.files['file']
+        if file:
+            upload_result = upload(file)
+            imageurl, options = cloudinary_url(upload_result['public_id'], 
+                format = 'jpg', width=250, height=250, crop='fit')
+        add_book = Book.create_book(title, author, isbn, category_id, quantity,
+            description, imageurl)
         if add_book == None:
-            failure = 'The book already exist'
-            return render_template('admin/addbook', form=form, failure=failure, user=user)
+            flash('The book already exist')
+            return render_template('admin/addbook', form=form, user=user)
         flash('The book has been successfully added')
         return redirect(url_for('admin.books'))
     return render_template('admin/addbook.html', form=form, user=user)
@@ -79,6 +91,7 @@ def editbook(id):
     user = g.user
     book = Book.edit_book(id)
     categories = Category.query.all()
+    old_image = book.imagepath
     form = BookForm(obj=book)
     if request.method == 'POST' and form.validate():
         book.title = request.form['title']
@@ -86,6 +99,19 @@ def editbook(id):
         book.isbn = request.form['isbn']
         book.categoryid = request.form.get('category')
         book.quantity = request.form['quantity']
+        book.description = request.form['description']
+        book.imagepath = request.files['file']
+        if book.imagepath:
+            upload_result = upload(book.imagepath)
+            old_url = old_image
+            imageurl, options = cloudinary_url(upload_result['public_id'], 
+                format='jpg', width=250, height=250, crop='fit')
+            if old_url is None:
+                book.imagepath = imageurl
+            else:
+                old_image_name = old_url.split('/')[-1].split('.')[0]
+                delete_old_image = delete_resources([old_image_name])
+                book.imagepath = imageurl
         Book.update()
         return redirect(url_for('admin.books'))
     return render_template('admin/editbook.html', user=user, book=book, categories=categories, form=form)

@@ -43,9 +43,10 @@ class User(Base, UserMixin):
     firstname = db.Column(db.String(64), index = True)
     lastname = db.Column(db.String(64), index = True)
     email = db.Column(db.String(64), index = True, unique = True)
-    pwdhash = db.Column(db.String(128), index = True)
+    pwdhash = db.Column(db.String(128), index = True, nullable=True)
     role = db.Column(db.String(30), index = True)
     imagepath = db.Column(db.String(140), index = True)
+    provider = db.Column(db.String(128), index = True)
     userborrowed = db.relationship('Borrowedbook', backref = 'users', lazy = 'dynamic')
 
     
@@ -130,15 +131,19 @@ class Book(Base):
     isbn = db.Column(db.String(60), index = True, unique = True)
     categoryid = db.Column(db.Integer, db.ForeignKey('category.id'))
     quantity = db.Column(db.Integer, index = True)
+    description = db.Column(db.String(512))
     status = db.Column(db.String(60), index = True)
+    imagepath = db.Column(db.String(140))
     bookborrowed = db.relationship('Borrowedbook', backref = 'books', lazy = 'dynamic')
     
-    def __init__(self, title, author, isbn, categoryid, quantity, status = 'true'):
+    def __init__(self, title, author, isbn, categoryid, quantity, description, imagepath, status = 'true'):
         self.title = title
         self.author = author
         self.isbn = isbn
         self.categoryid = categoryid
         self.quantity = quantity
+        self.description = description
+        self.imagepath = imagepath
         self.status = status
 
     def __repr__(self):
@@ -157,13 +162,15 @@ class Book(Base):
         return book
 
     @staticmethod
-    def create_book(title, author, isbn, categoryid, quantity):
+    def create_book(title, author, isbn, categoryid, quantity, description, imagepath):
         book =  Book(
             title = title, 
             author = author, 
             isbn = isbn, 
             categoryid = categoryid,
-            quantity = quantity
+            quantity = quantity,
+            description = description,
+            imagepath = imagepath
         )
         check_book = Book.query.filter_by(title = title).first()
         if check_book == None:

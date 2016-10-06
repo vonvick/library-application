@@ -7,7 +7,7 @@
         {% if failure %}
         <p class=errors><strong>Error:</strong> {{ failure }}</p>
         {% endif %}
-        <form action="{{ url_for('admin.addbook') }}" method="post">
+        <form action="{{ url_for('admin.addbook') }}" method="post" enctype="multipart/form-data">
             <!--<div class="row">-->
             <div class="col m6 s12">
                 <dl>
@@ -16,7 +16,18 @@
                     {{ render_field(form.isbn) }} 
                     {{ render_field(form.category) }} 
                     {{ render_field(form.quantity) }}
+                    {{ render_field(form.description) }}
                 </dl>
+                <div class="file-field input-field">
+                    <div class="btn">
+                        <span>File</span>
+                        <input type="file">
+                    </div>
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text" placeholder="Click to select an image">
+                        {{ render_field(form.file)}}
+                    </div>
+                </div>
             </div>
             <div class="row">
                 <div class="login-buttons">
