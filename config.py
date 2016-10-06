@@ -10,8 +10,8 @@ class Config(object):
     SECRET_KEY = os.environ.get('SECRET_KEY')
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
     CLOUDINARY_URL = os.environ.get('CLOUDINARY_URL')
-    GOOGLE_LOGIN_CLIENT_ID = "10894599167-7su82sutnhudiase1isrloi1s2ivc41u.apps.googleusercontent.com"
-    GOOGLE_LOGIN_CLIENT_SECRET = "qiZ1SM_dfDlTG11Hfso1Xmdy"
+    GOOGLE_LOGIN_CLIENT_ID = os.environ.get('GOOGLE_LOGIN_CLIENT_ID')
+    GOOGLE_LOGIN_CLIENT_SECRET = os.environ.get('GOOGLE_LOGIN_CLIENT_SECRET')
 
     OAUTH_CREDENTIALS={
         'google': {
@@ -19,8 +19,6 @@ class Config(object):
             'secret': GOOGLE_LOGIN_CLIENT_SECRET
         }
     }
-    
-
 
 class ProductionConfig(Config):
     DEBUG = False

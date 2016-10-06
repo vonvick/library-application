@@ -14,7 +14,15 @@
 <ul id="slide-out" class="side-nav fixed">
     <li>
         <div class="userView">
-            <a href="#!user"><img class="rounded-image profile" src="{{user.imagepath}}"></a>
+            <a href="#!user">
+                {% if not user.imagepath %}
+                <img class="rounded-image profile" src="{{user.avatar(user.email, 128)}}" />
+                {% endif %}
+
+                {% if user.imagepath %}
+                <img class="rounded-image profile" src="{{user.imagepath}}" />
+                {% endif %}
+            </a>
             <a href="#!name"><span class="white-text name">{{user.firstname}} {{user.lastname}}</span></a>
             <a href="#!email"><span class="white-text email">{{user.email}}</span></a>
         </div>
@@ -30,7 +38,15 @@
 <div class="container">
     <div id="show-profile">
         <div class="row center-align">
-            <img class="rounded-image profile" src="{{ user.imagepath}}" />
+            <a href="#!user">
+                {% if not user.imagepath %}
+                <img class="rounded-image profile" src="{{user.avatar(user.email, 128)}}" />
+                {% endif %}
+
+                {% if user.imagepath %}
+                <img class="rounded-image profile" src="{{user.imagepath}}" />
+                {% endif %}
+            </a>
             <p class="flow-text">First Name: {{ user.firstname }} </p>
             <p class="flow-text">Last Name: {{ user.lastname }} </p>
             <p class="flow-text">Email: {{ user.email }} </p>

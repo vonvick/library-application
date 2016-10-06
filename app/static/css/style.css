@@ -103,6 +103,23 @@ input {
     list-style: none;
 }
 
+.header-dropdown {
+    top: auto !important;
+}
+
+.header-dropdown .dropdown-pic img {
+    width: auto;
+    height: auto;
+    border-radius: 100%;
+}
+
+.header-dropdown .dropdown-pic {
+    padding-top: 20px;
+    padding-left: 50px;
+    padding-right: 30px;
+    padding-bottom: 20px;
+}
+
 .side-nav {
     top: 0;
     left: 0;

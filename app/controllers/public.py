@@ -1,7 +1,7 @@
 # app/controllers/public.py
 
-from flask import Blueprint, render_template, redirect, url_for, request, flash, g, jsonify, json
-from flask_login import LoginManager, login_user, logout_user, current_user, login_required, UserMixin
+from flask import Blueprint, flash, g, jsonify, json, render_template, redirect, url_for, request
+from flask_login import LoginManager, current_user, login_user, logout_user, login_required, UserMixin
 from flask_sqlalchemy import SQLAlchemy
 
 from cloudinary.uploader import upload
@@ -39,11 +39,9 @@ def register():
 
         save_user = User.create_user(firstname, lastname, email, password)
         if save_user == None: 
-            failure = 'This email address already exists in our register. \
-            Please enter another one  or go to the login page to login.'
-            return render_template('public/signup.html', form=registerform, failure=failure)
-        
-        #redirects to the dashboard page after successful RegistrationForm
+            flash('This email address already exists in our register. \
+                Please enter another one  or go to the login page to login.')
+            return render_template('public/signup.html', form=registerform)
         flash('You have been successfully registered')
         user = save_user
         login_user(user)
@@ -56,8 +54,7 @@ def login():
     if g.user is not None and g.user.is_authenticated:
         return redirect(url_for('public.dashboard'))
     form = EmailPasswordForm()
-    if request.method == 'POST' and form.validate():
-        #Check the email and password in the database and log the user in        
+    if request.method == 'POST' and form.validate():     
         email = form.email.data
         password = form.password.data
         is_user = User.get_user(email, password)
@@ -175,7 +172,7 @@ def dashboard():
         return render_template('public/dashboard.html', user=user, books=books,
             user_borrowed = user_borrowed)
     else:
-        message = 'You do not have any books in your custody'
+        flash('You have not borrowed any book yet')
         data = {'status': str(message)}
         return jsonify(data)
     return render_template('public/dashboard.html', user=user, message=message)
@@ -201,7 +198,7 @@ def borrow(id):
             failure = 'Sorry, you can not borrow this book as you '\
                 'have not returned this book you collected before' 
             data = {
-                'status': str(success),
+                'status': str(failure),
                 'quantity': str(book.quantity)
             }
             return jsonify(data)
@@ -222,13 +219,12 @@ def borrow(id):
 @public.route('/returnbook/<int:id>')
 @login_required
 def replace(id):
-    user = g.user
-    book = Book.get_book(id)
-
     ''' 
         checks if a borrowed book returned status is false 
         then sets it to true and increase the quantity by 1
     '''
+    user = g.user
+    book = Book.get_book(id)
     returned = Borrowedbook.return_borrowed(book, user)
     if returned:
         success = 'You have returned this book'
