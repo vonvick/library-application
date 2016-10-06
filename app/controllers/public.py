@@ -85,7 +85,7 @@ def social_login():
         password = json_dict['id']
         save_user = User.create_user(firstname, lastname, email, password)
         if save_user == None:
-            is_user = User.get_user(email, password)
+            is_user = User.query.filter_by(email = email).first()
             if is_user:
                 login_user(is_user)
                 success = 'You have successfully logged-in'

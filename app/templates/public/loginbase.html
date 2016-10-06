@@ -7,84 +7,16 @@
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/lib/materialize.min.css') }}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/lib/sweetalert.css') }}">
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
     <script type="text/javascript" src="{{ url_for('static', filename='js/lib/jquery-2.2.4.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/lib/materialize.js')}}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/lib/materialize.min.js')}}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/layout.js')}}"></script>
-    <script>
-        // $(document).ready(function(){
-        function statusChangeCallback(response) {
-            console.log('statusChangeCallback');
-            console.log(response);
-            if (response.status === 'connected') {
-                testAPI();
-            } else if (response.status === 'not_authorized') {
-                document.getElementById('status').innerHTML = 'Please log ' +
-                    'into this app.';
-            } else {
-                document.getElementById('status').innerHTML = 'Please log ' +
-                    'into Facebook.';
-            }
-        }
-
-        function loginFacebook() {
-            FB.login(function(response) {
-                statusChangeCallback(response);
-            }, {
-                scope: 'public_profile,email'
-            });
-        }
-
-        window.fbAsyncInit = function() {
-            FB.init({
-                appId: '1205949532779825',
-                cookie: true,
-                xfbml: false,
-                version: 'v2.5' // use graph api version 2.5
-            });
-        };
-        // Load the SDK asynchronously
-        (function(d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) return;
-            js = d.createElement(s);
-            js.id = id;
-            js.src = "//connect.facebook.net/en_US/sdk.js";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
-
-        function testAPI() {
-            console.log('Welcome!  Fetching your information.... ');
-            FB.api('/me', {
-                    locale: 'en_US',
-                    fields: 'name, email, id'
-                },
-                function(response) {
-                    console.log(response)
-                    console.log(response.email)
-                    console.log(response.id)
-                    console.log('Successful login for: ' + response.name);
-                    document.getElementById('status').innerHTML =
-                        'Thanks for logging in, ' + response.name + '!';
-                    $.ajax({
-                        type: "POST",
-                        url: "/social/login",
-                        data: JSON.stringify(response),
-                        contentType: 'application/json;charset=UTF-8',
-                        success: function(result) {
-                            console.log(result);
-                            window.location.href = "{{url_for('public.dashboard')}}"
-                        },
-                        error: function(error) {
-                            console.log(error);
-                        }
-                    });
-                });
-        }
-        // });
-    </script>
+    <script src="{{ url_for('static', filename='js/lib/sweetalert.min.js')}}"></script>
+    <script type=text/javascript>$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};</script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/fbauth.js')}}"></script>
 
 </head>
 
