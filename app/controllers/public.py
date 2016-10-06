@@ -110,7 +110,7 @@ def oauth_callback(provider):
     if g.user is not None and g.user.is_authenticated:
         return redirect(url_for('public.dashboard'))
     oauth = OAuthSignIn.get_provider(provider)
-    username, email = oauth.callback()
+    firstname, email = oauth.callback()
     if email is None:
         flash('Authentication failed.')
         return redirect(url_for('public.login'))
