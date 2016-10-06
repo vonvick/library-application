@@ -116,7 +116,7 @@ def oauth_callback(provider):
         return redirect(url_for('public.login'))
     user=User.query.filter_by(email=email).first()
     if not user:
-        lastname = ''
+        lastname = firstname
         password = ''
         if firstname is None or firstname == "":
             firstname = email.split('@')[0]
