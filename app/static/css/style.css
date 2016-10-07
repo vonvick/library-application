@@ -108,9 +108,7 @@ input {
 }
 
 .header-dropdown .dropdown-pic img {
-    width: auto;
-    height: auto;
-    border-radius: 100%;
+    border-radius: 50%;
 }
 
 .header-dropdown .dropdown-pic {
@@ -118,6 +116,8 @@ input {
     padding-left: 50px;
     padding-right: 30px;
     padding-bottom: 20px;
+    margin: auto;
+    width: 80%;
 }
 
 .book-image {
