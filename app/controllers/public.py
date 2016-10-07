@@ -23,7 +23,8 @@ def before_request():
 @public.route('/')
 def index():
     user = g.user
-    return render_template('public/index.html', user=user)
+    categories = Category.query.all()
+    return render_template('public/index.html', user=user, categories = categories)
 
 
 @public.route('/register/', methods=['GET', 'POST'])
@@ -186,6 +187,18 @@ def books():
     books = Book.get_books_user(user.id)
     return render_template('public/books.html', books=books,\
         user=user)
+
+
+@public.route('/categories/<int:id>')
+@login_required
+def category_books(id):
+    user = g.user
+    category = Category.query.get(id)
+    books = Book.query.filter(Book.categoryid == category.id).all()
+    if books == None:
+        flash("There are no books available for this category")
+        return render_template('public/books.html', user=user, books=books)
+    return render_template('public/books.html', user=user, books=books)
 
 
 @public.route('/borrowbook/<int:id>')
